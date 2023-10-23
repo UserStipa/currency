@@ -5,25 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.userstipa.currency.App
 import com.userstipa.currency.databinding.FragmentSecondBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class SearchFragment : Fragment() {
 
     @Inject
-    lateinit var viewModelFactory: SearchViewModel.Factory
+    lateinit var viewModelFactory: SearchViewModelFactory
     private val viewModel by viewModels<SearchViewModel> { viewModelFactory }
     private val adapter = SearchAdapter()
     private var _binding: FragmentSecondBinding? = null
@@ -38,7 +37,7 @@ class SearchFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSecondBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -60,9 +59,15 @@ class SearchFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
                     adapter.list = uiState.list
+                    binding.progressBar.isVisible = uiState.isLoading
+                    uiState.error?.let { showMessage(it) }
                 }
             }
         }
+    }
+
+    private fun showMessage(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

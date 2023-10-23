@@ -1,7 +1,6 @@
 package com.userstipa.currency.di
 
-import com.userstipa.currency.ui.home.HomeViewModelFactory
-import com.userstipa.currency.ui.search_currency.SearchViewModel
+import com.userstipa.currency.ui.search_currency.SearchViewModelFactory
 import dagger.Module
 import dagger.Provides
 
@@ -9,14 +8,8 @@ import dagger.Provides
 class ViewModelFactoryModule {
 
     @Provides
-    fun provideSearchViewModelFactory(): SearchViewModel.Factory {
-        return SearchViewModel.Factory()
+    fun provideSearchViewModelFactory(): SearchViewModelFactory {
+        return SearchViewModelFactory()
     }
-
-    @Provides
-    fun provideHomeViewModelFactory(): HomeViewModelFactory {
-        return HomeViewModelFactory()
-    }
-
 
 }

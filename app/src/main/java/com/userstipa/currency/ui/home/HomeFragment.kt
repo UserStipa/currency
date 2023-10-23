@@ -6,21 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentFirstBinding
-import javax.inject.Inject
 
-/**
- * A simple [Fragment] subclass as the default destination in the navigation.
- */
 class HomeFragment : Fragment() {
-
-    @Inject
-    lateinit var viewModelFactory: HomeViewModelFactory
-    private val viewModel by viewModels<HomeViewModel> { viewModelFactory }
 
     private var _binding: FragmentFirstBinding? = null
     private val binding get() = _binding!!
