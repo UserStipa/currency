@@ -1,5 +1,6 @@
 package com.userstipa.currency.domain.model
 
 data class Currency(
-    val name: String
+    val name: String,
+    val symbol: String
 )

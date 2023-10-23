@@ -4,9 +4,30 @@
     android:layout_height="70dp">
 
     <TextView
+        android:id="@+id/symbol"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginHorizontal="10dp"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:text="BTC"
+        android:gravity="center"
+        android:ellipsize="end" />
+
+    <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
+        android:layout_marginHorizontal="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_toEndOf="@id/symbol"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Bitcoin"
+        android:textSize="20sp" />
+
 
 </RelativeLayout>

@@ -31,7 +31,10 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currency = list[position]
-        holder.binding.name.text = currency.name
+        with(holder.binding) {
+            name.text = currency.name
+            symbol.text = currency.symbol
+        }
     }
 
     inner class Holder(val binding: HomeItemListBinding) : RecyclerView.ViewHolder(binding.root)
