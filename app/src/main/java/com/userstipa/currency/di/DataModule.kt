@@ -1,6 +1,9 @@
 package com.userstipa.currency.di
 
+import android.content.Context
 import com.userstipa.currency.data.api.CryptocurrencyApi
+import com.userstipa.currency.data.local.Preferences
+import com.userstipa.currency.data.local.PreferencesImpl
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -18,6 +21,12 @@ class DataModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(CryptocurrencyApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providePreferences(context: Context): Preferences {
+        return PreferencesImpl(context)
     }
 
 }

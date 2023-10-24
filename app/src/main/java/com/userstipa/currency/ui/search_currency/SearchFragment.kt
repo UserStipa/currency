@@ -15,16 +15,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.userstipa.currency.App
 import com.userstipa.currency.databinding.FragmentSecondBinding
+import com.userstipa.currency.domain.model.Currency
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(), SearchAdapterListener {
 
     @Inject
     lateinit var viewModelFactory: SearchViewModelFactory
     private val viewModel by viewModels<SearchViewModel> { viewModelFactory }
-    private val adapter = SearchAdapter()
+    private val adapter = SearchAdapter(this)
     private var _binding: FragmentSecondBinding? = null
     private val binding get() = _binding!!
 
@@ -65,6 +66,10 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onClickCurrency(currency: Currency) {
+        viewModel.addCurrency(currency)
     }
 
     private fun showMessage(text: String) {

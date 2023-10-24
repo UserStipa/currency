@@ -7,7 +7,7 @@ import com.userstipa.currency.di.DaggerAppComponent
 class App : Application() {
 
     val appComponent: AppComponent by lazy {
-        DaggerAppComponent.create()
+        DaggerAppComponent.factory().create(applicationContext)
     }
 
 }

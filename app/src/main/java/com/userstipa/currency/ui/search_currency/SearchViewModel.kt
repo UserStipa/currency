@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import com.userstipa.currency.domain.Resource
+import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrencies
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +14,7 @@ import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
     private val getRemoteCurrencies: GetRemoteCurrencies,
+    private val addCurrency: AddCurrency,
     private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
@@ -35,6 +38,12 @@ class SearchViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+
+    fun addCurrency(currency: Currency) {
+        viewModelScope.launch(dispatcher.io) {
+            addCurrency.launch(currency)
         }
     }
 

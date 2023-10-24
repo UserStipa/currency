@@ -8,7 +8,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.Currency
 
-class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Holder>() {
+interface SearchAdapterListener {
+    fun onClickCurrency(currency: Currency)
+}
+
+class SearchAdapter(
+    private val listener: SearchAdapterListener
+) : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
 
@@ -18,11 +24,13 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(HomeItemListBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        ))
+        return Holder(
+            HomeItemListBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {
@@ -34,6 +42,9 @@ class SearchAdapter : RecyclerView.Adapter<SearchAdapter.Holder>() {
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
+            checkbox.setOnCheckedChangeListener { _, isChecked ->
+                listener.onClickCurrency(currency)
+            }
         }
     }
 

@@ -7,6 +7,7 @@ class CurrencyMapper : Mapper<CurrencyDto, Currency> {
 
     override fun map(input: CurrencyDto): Currency {
         return Currency(
+            id = input.id,
             name = input.name,
             symbol = input.symbol
         )
@@ -14,7 +15,15 @@ class CurrencyMapper : Mapper<CurrencyDto, Currency> {
 
     override fun map(input: List<CurrencyDto>): List<Currency> {
         val resultList = mutableListOf<Currency>()
-        input.forEach { resultList.add(Currency(it.name, it.symbol)) }
+        input.forEach {
+            resultList.add(
+                Currency(
+                    id = it.id,
+                    name = it.name,
+                    symbol = it.symbol
+                )
+            )
+        }
         return resultList
     }
 
