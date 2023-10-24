@@ -2,6 +2,7 @@ package com.userstipa.currency.ui.search_currency
 
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.testUtil.AddCurrencyFake
 import com.userstipa.currency.testUtil.DispatcherProviderFake
 import com.userstipa.currency.testUtil.GetRemoteCurrenciesFake
 import kotlinx.coroutines.test.runTest
@@ -13,13 +14,15 @@ class SearchViewModelTest {
 
     private lateinit var viewModel: SearchViewModel
     private lateinit var getRemoteCurrencies: GetRemoteCurrenciesFake
+    private lateinit var addCurrency: AddCurrencyFake
     private lateinit var dispatcher: DispatcherProviderFake
 
     @Before
     fun setUp() {
         dispatcher = DispatcherProviderFake()
         getRemoteCurrencies = GetRemoteCurrenciesFake()
-        viewModel = SearchViewModel(getRemoteCurrencies, dispatcher)
+        addCurrency = AddCurrencyFake()
+        viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, dispatcher)
     }
 
     @Test
@@ -40,10 +43,10 @@ class SearchViewModelTest {
     fun `getUiState - get list successful state`() = runTest {
         viewModel.fetchData()
         val list = listOf(
-            Currency("BTC_0", "Bitcoin_0"),
-            Currency("BTC_1", "Bitcoin_2"),
-            Currency("BTC_2", "Bitcoin_3"),
-            Currency("BTC_4", "Bitcoin_4"),
+            Currency("bitcoin1", "Bitcoin_0", "BTC_0"),
+            Currency("bitcoin2", "Bitcoin_1", "BTC_1"),
+            Currency("bitcoin3", "Bitcoin_2", "BTC_2"),
+            Currency("bitcoin4", "Bitcoin_3", "BTC_3"),
         )
         getRemoteCurrencies.emit(Resource.Success(list))
 
@@ -59,5 +62,12 @@ class SearchViewModelTest {
 
         val expectedValue = SearchUiState(error = "Test error")
         Assert.assertEquals(expectedValue, viewModel.uiState.value)
+    }
+
+    @Test
+    fun `add currency`() = runTest {
+        val expectedValue = Currency("bitcoin1", "Bitcoin_0", "BTC_0")
+        viewModel.addCurrency(expectedValue)
+        Assert.assertEquals(expectedValue, addCurrency.result)
     }
 }
