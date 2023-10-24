@@ -14,17 +14,17 @@ class PreferencesImpl @Inject constructor(
 
     private val Context.dataStore: DataStore<androidx.datastore.preferences.core.Preferences> by preferencesDataStore(name = PREFERENCES_NAME)
 
-    override suspend fun setPreferences(key: PreferencesKeys, values: List<String>) {
+    override suspend fun setPreferences(key: PreferencesKeys, values: Set<String>) {
         val stringSetKey = stringSetPreferencesKey(key.name)
         context.dataStore.edit { preferences ->
-            preferences[stringSetKey] = values.toSet()
+            preferences[stringSetKey] = values
         }
     }
 
-    override suspend fun getPreferences(key: PreferencesKeys): List<String> {
+    override suspend fun getPreferences(key: PreferencesKeys): Set<String> {
         val stringSetKey = stringSetPreferencesKey(key.name)
         val preferences = context.dataStore.data.first()
-        return preferences[stringSetKey]?.toList() ?: emptyList()
+        return preferences[stringSetKey] ?: emptySet()
     }
 
     companion object {

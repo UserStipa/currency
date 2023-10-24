@@ -10,8 +10,8 @@ interface Repository {
 
     suspend fun getRemoteCurrencies(): Response<GetCurrenciesDto>
 
-    suspend fun setPreferences(key: PreferencesKeys, value: List<String>)
+    suspend fun setPreferences(key: PreferencesKeys, value: Set<String>)
 
-    suspend fun getPreferences(key: PreferencesKeys): List<String>
+    suspend fun getPreferences(key: PreferencesKeys): Set<String>
 
 }

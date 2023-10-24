@@ -20,11 +20,11 @@ class RepositoryImpl @Inject constructor(
         return api.getCurrencies()
     }
 
-    override suspend fun setPreferences(key: PreferencesKeys, value: List<String>) {
+    override suspend fun setPreferences(key: PreferencesKeys, value: Set<String>) {
         preferences.setPreferences(key, value)
     }
 
-    override suspend fun getPreferences(key: PreferencesKeys): List<String> {
+    override suspend fun getPreferences(key: PreferencesKeys): Set<String> {
         return preferences.getPreferences(key)
     }
 }

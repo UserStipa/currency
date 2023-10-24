@@ -11,7 +11,7 @@ class AddCurrencyImpl @Inject constructor(
 
     override suspend fun launch(currency: Currency) {
         val currentMyCurrencies = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
-        currentMyCurrencies.toMutableList().add(currency.id)
-        repository.setPreferences(PreferencesKeys.MY_CURRENCIES, currentMyCurrencies.toList())
+        val newSet = currentMyCurrencies.plus(currency.id)
+        repository.setPreferences(PreferencesKeys.MY_CURRENCIES, newSet)
     }
 }
