@@ -20,13 +20,12 @@ class GetAllCurrenciesImpl @Inject constructor(
             emit(Resource.Loading())
             val networkResult = repository.getRemoteCurrencies()
             val data = networkResult.body()!!.data
-            val remoteCurrencies = mapper.map(data)
-
+            val currencies = mapper.map(data)
             val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
-            remoteCurrencies.forEach { remoteCurrency ->
+            currencies.forEach { remoteCurrency ->
                 remoteCurrency.isEnableCheckbox = (myCurrenciesIds.contains(remoteCurrency.id))
             }
-            emit(Resource.Success(remoteCurrencies))
+            emit(Resource.Success(currencies))
         } catch (e: Throwable) {
             emit(Resource.Error(e))
         }

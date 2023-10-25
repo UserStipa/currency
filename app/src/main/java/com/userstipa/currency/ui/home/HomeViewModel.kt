@@ -25,7 +25,8 @@ class HomeViewModel @Inject constructor(
             getMyCurrencies.launch().collect { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _uiState.update { it.copy(error = result.exception.message) }
+                        _uiState.update { it.copy(isLoading = false, error = result.exception.message) }
+                        result.exception.printStackTrace()
                     }
 
                     is Resource.Loading -> {
