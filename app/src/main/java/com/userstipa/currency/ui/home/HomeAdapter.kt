@@ -1,21 +1,14 @@
-package com.userstipa.currency.ui.search_currency
+package com.userstipa.currency.ui.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.userstipa.currency.databinding.SearchItemListBinding
+import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.Currency
 
-interface SearchAdapterListener {
-    fun onClickAddCurrency(currency: Currency)
-    fun onClickRemoveCurrency(currency: Currency)
-}
-
-class SearchAdapter(
-    private val listener: SearchAdapterListener
-) : RecyclerView.Adapter<SearchAdapter.Holder>() {
+class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
 
@@ -26,7 +19,7 @@ class SearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            SearchItemListBinding.inflate(
+            HomeItemListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -43,21 +36,10 @@ class SearchAdapter(
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
-            checkbox.isChecked = currency.isEnableCheckbox
-            checkbox.setOnClickListener {
-                if (checkbox.isChecked) {
-                    listener.onClickAddCurrency(currency)
-                    currency.isEnableCheckbox = true
-                } else {
-                    listener.onClickRemoveCurrency(currency)
-                    currency.isEnableCheckbox = false
-                }
-                notifyItemChanged(holder.adapterPosition)
-            }
         }
     }
 
-    inner class Holder(val binding: SearchItemListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class Holder(val binding: HomeItemListBinding) : RecyclerView.ViewHolder(binding.root)
 
     inner class DiffUtilCallback : DiffUtil.ItemCallback<Currency>() {
         override fun areItemsTheSame(oldItem: Currency, newItem: Currency): Boolean {

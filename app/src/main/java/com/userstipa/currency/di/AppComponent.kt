@@ -4,6 +4,7 @@ import android.content.Context
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
+import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import com.userstipa.currency.ui.home.HomeFragment
 import com.userstipa.currency.ui.search_currency.SearchFragment
@@ -20,11 +21,13 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    fun getRemoteCurrencies(): GetAllCurrencies
+    fun useCaseGetAllCurrencies(): GetAllCurrencies
 
-    fun getAddCurrency(): AddCurrency
+    fun useCaseGetMyCurrencies(): GetMyCurrencies
 
-    fun getRemoveCurrency(): RemoveCurrency
+    fun useCaseAddCurrency(): AddCurrency
+
+    fun useCaseRemoveCurrency(): RemoveCurrency
 
     fun getDispatcherProvider(): DispatcherProvider
 

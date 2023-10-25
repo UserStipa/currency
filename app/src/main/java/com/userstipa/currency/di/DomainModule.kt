@@ -12,6 +12,8 @@ import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesImpl
+import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
+import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrenciesImpl
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrencyImpl
 import dagger.Module
@@ -43,6 +45,12 @@ class DomainModule {
     @Singleton
     fun provideAddCurrency(repository: Repository): AddCurrency {
         return AddCurrencyImpl(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetMyCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, Currency>): GetMyCurrencies {
+        return GetMyCurrenciesImpl(repository, mapper)
     }
 
     @Provides
