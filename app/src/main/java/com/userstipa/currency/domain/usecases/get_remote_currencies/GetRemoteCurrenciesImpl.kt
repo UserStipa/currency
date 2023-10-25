@@ -1,6 +1,7 @@
 package com.userstipa.currency.domain.usecases.get_remote_currencies
 
 import com.userstipa.currency.data.api.CurrencyDto
+import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.Mapper
@@ -19,11 +20,17 @@ class GetRemoteCurrenciesImpl @Inject constructor(
             emit(Resource.Loading())
             val networkResult = repository.getRemoteCurrencies()
             val data = networkResult.body()!!.data
-            val result = mapper.map(data)
-            emit(Resource.Success(result))
+            val remoteCurrencies = mapper.map(data)
+
+            val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
+            remoteCurrencies.forEach { remoteCurrency ->
+                remoteCurrency.isEnableCheckbox = (myCurrenciesIds.contains(remoteCurrency.id))
+            }
+            emit(Resource.Success(remoteCurrencies))
         } catch (e: Throwable) {
             emit(Resource.Error(e))
         }
     }
+
 
 }

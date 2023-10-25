@@ -12,8 +12,9 @@ class SearchViewModelFactory : ViewModelProvider.Factory {
             checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
         val getRemoteCurrencies = (application as App).appComponent.getRemoteCurrencies()
         val addCurrency = application.appComponent.getAddCurrency()
+        val removeCurrency = application.appComponent.getRemoveCurrency()
         val dispatcherProvider = application.appComponent.getDispatcherProvider()
-        return SearchViewModel(getRemoteCurrencies, addCurrency, dispatcherProvider) as T
+        return SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcherProvider) as T
     }
 
 }
