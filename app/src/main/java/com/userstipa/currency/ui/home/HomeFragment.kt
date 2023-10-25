@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.userstipa.currency.App
 import com.userstipa.currency.R
-import com.userstipa.currency.databinding.FragmentFirstBinding
+import com.userstipa.currency.databinding.FragmentHomeBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class HomeFragment : Fragment() {
     lateinit var viewModelFactory: HomeViewModelFactory
     private val viewModel by viewModels<HomeViewModel> { viewModelFactory }
     private val adapter = HomeAdapter()
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
     override fun onAttach(context: Context) {
@@ -39,7 +39,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFirstBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUi() {
-        binding.btn.setOnClickListener {
+        binding.btnAdd.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }
