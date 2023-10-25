@@ -5,7 +5,9 @@ import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 
 class RemoveCurrencyFake : RemoveCurrency {
 
+    var result: Currency? = null
+
     override suspend fun launch(currency: Currency) {
-        TODO("Not yet implemented")
+        result = currency
     }
 }

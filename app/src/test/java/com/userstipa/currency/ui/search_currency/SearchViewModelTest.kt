@@ -73,4 +73,11 @@ class SearchViewModelTest {
         viewModel.addCurrency(expectedValue)
         Assert.assertEquals(expectedValue, addCurrency.result)
     }
+
+    @Test
+    fun `remove currency`() = runTest {
+        val expectedValue = Currency("bitcoin1", "Bitcoin_0", "BTC_0", true)
+        viewModel.removeCurrency(expectedValue)
+        Assert.assertEquals(expectedValue, removeCurrency.result)
+    }
 }

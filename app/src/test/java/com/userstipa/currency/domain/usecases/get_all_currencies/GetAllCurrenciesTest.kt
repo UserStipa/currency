@@ -1,4 +1,4 @@
-package com.userstipa.currency.domain.usecases.get_remote_currencies
+package com.userstipa.currency.domain.usecases.get_all_currencies
 
 import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.api.GetCurrenciesDto
@@ -6,7 +6,6 @@ import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.CurrencyMapper
 import com.userstipa.currency.domain.model.Currency
-import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesImpl
 import com.userstipa.currency.testUtil.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -18,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
 
-class GetRemoteCurrenciesTest {
+class GetAllCurrenciesTest {
 
     private lateinit var getRemoteCurrencies: GetAllCurrenciesImpl
     private lateinit var repositoryFake: RepositoryFake

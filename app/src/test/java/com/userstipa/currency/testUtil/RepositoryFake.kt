@@ -8,10 +8,13 @@ import retrofit2.Response
 class RepositoryFake : Repository {
 
     var result: Response<GetCurrenciesDto>? = null
+    var ids: String? = null
 
     private val preferencesFake = mutableMapOf<String, Set<String>>()
 
     override suspend fun getRemoteCurrencies(ids: String): Response<GetCurrenciesDto> {
+        this.ids = ids
+        println("set ids")
         return result!!
     }
 
