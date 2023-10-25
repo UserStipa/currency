@@ -6,8 +6,10 @@ import com.userstipa.currency.data.local.Preferences
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.data.repository.RepositoryImpl
 import com.userstipa.currency.domain.mapper.CurrencyMapper
+import com.userstipa.currency.domain.mapper.CurrencyPriceMapper
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
@@ -49,7 +51,7 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun provideGetMyCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, Currency>): GetMyCurrencies {
+    fun provideGetMyCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, CurrencyPrice>): GetMyCurrencies {
         return GetMyCurrenciesImpl(repository, mapper)
     }
 
@@ -57,5 +59,11 @@ class DomainModule {
     @Singleton
     fun provideCurrencyMapper(): Mapper<CurrencyDto, Currency> {
         return CurrencyMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyPriceMapper(): Mapper<CurrencyDto, CurrencyPrice> {
+        return CurrencyPriceMapper()
     }
 }
