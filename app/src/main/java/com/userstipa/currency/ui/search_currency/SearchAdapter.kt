@@ -9,7 +9,8 @@ import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.Currency
 
 interface SearchAdapterListener {
-    fun onClickCurrency(currency: Currency)
+    fun onClickAddCurrency(currency: Currency)
+    fun onClickRemoveCurrency(currency: Currency)
 }
 
 class SearchAdapter(
@@ -42,8 +43,16 @@ class SearchAdapter(
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
-            checkbox.setOnCheckedChangeListener { _, isChecked ->
-                listener.onClickCurrency(currency)
+            checkbox.isChecked = currency.isEnableCheckbox
+            checkbox.setOnClickListener {
+                if (checkbox.isChecked) {
+                    listener.onClickAddCurrency(currency)
+                    currency.isEnableCheckbox = true
+                } else {
+                    listener.onClickRemoveCurrency(currency)
+                    currency.isEnableCheckbox = false
+                }
+                notifyItemChanged(holder.adapterPosition)
             }
         }
     }

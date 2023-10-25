@@ -68,8 +68,12 @@ class SearchFragment : Fragment(), SearchAdapterListener {
         }
     }
 
-    override fun onClickCurrency(currency: Currency) {
+    override fun onClickAddCurrency(currency: Currency) {
         viewModel.addCurrency(currency)
+    }
+
+    override fun onClickRemoveCurrency(currency: Currency) {
+        viewModel.removeCurrency(currency)
     }
 
     private fun showMessage(text: String) {

@@ -70,7 +70,8 @@ class GetRemoteCurrenciesImplTest {
                 Currency(
                     id = "value_id",
                     name = "value_name",
-                    symbol = "value_symbol"
+                    symbol = "value_symbol",
+                    isEnableCheckbox = false
                 )
             )
         )

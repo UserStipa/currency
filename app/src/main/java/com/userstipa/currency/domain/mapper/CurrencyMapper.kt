@@ -9,7 +9,8 @@ class CurrencyMapper : Mapper<CurrencyDto, Currency> {
         return Currency(
             id = input.id,
             name = input.name,
-            symbol = input.symbol
+            symbol = input.symbol,
+            isEnableCheckbox = false
         )
     }
 
@@ -20,7 +21,8 @@ class CurrencyMapper : Mapper<CurrencyDto, Currency> {
                 Currency(
                     id = it.id,
                     name = it.name,
-                    symbol = it.symbol
+                    symbol = it.symbol,
+                    isEnableCheckbox = false
                 )
             )
         }

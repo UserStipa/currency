@@ -12,6 +12,8 @@ import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrencies
 import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrenciesImpl
+import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
+import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrencyImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -29,6 +31,12 @@ class DomainModule {
     @Singleton
     fun provideGetRemoteCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, Currency>): GetRemoteCurrencies {
         return GetRemoteCurrenciesImpl(repository, mapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideRemoveCurrency(repository: Repository): RemoveCurrency {
+        return RemoveCurrencyImpl(repository)
     }
 
     @Provides
