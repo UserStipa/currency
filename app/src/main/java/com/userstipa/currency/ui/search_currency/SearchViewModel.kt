@@ -6,7 +6,7 @@ import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
-import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrencies
+import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
-    private val getRemoteCurrencies: GetRemoteCurrencies,
+    private val getAllCurrencies: GetAllCurrencies,
     private val addCurrency: AddCurrency,
     private val removeCurrency: RemoveCurrency,
     private val dispatcher: DispatcherProvider
@@ -25,7 +25,7 @@ class SearchViewModel @Inject constructor(
 
     fun fetchData() {
         viewModelScope.launch(dispatcher.io) {
-            getRemoteCurrencies.launch().collect { result ->
+            getAllCurrencies.launch().collect { result ->
                 when (result) {
                     is Resource.Error -> {
                         _uiState.value = SearchUiState(error = result.exception.message)

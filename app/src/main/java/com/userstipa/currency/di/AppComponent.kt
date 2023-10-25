@@ -3,7 +3,7 @@ package com.userstipa.currency.di
 import android.content.Context
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
-import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrencies
+import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import com.userstipa.currency.ui.home.HomeFragment
 import com.userstipa.currency.ui.search_currency.SearchFragment
@@ -20,7 +20,7 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    fun getRemoteCurrencies(): GetRemoteCurrencies
+    fun getRemoteCurrencies(): GetAllCurrencies
 
     fun getAddCurrency(): AddCurrency
 

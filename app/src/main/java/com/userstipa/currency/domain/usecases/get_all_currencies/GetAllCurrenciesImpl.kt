@@ -1,4 +1,4 @@
-package com.userstipa.currency.domain.usecases.get_remote_currencies
+package com.userstipa.currency.domain.usecases.get_all_currencies
 
 import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.local.PreferencesKeys
@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetRemoteCurrenciesImpl @Inject constructor(
+class GetAllCurrenciesImpl @Inject constructor(
     private val repository: Repository,
     private val mapper: Mapper<CurrencyDto, Currency>
-) : GetRemoteCurrencies {
+) : GetAllCurrencies {
 
     override fun launch(): Flow<Resource<List<Currency>>> = flow {
         try {
