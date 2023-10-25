@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.userstipa.currency.databinding.HomeItemListBinding
+import com.userstipa.currency.databinding.SearchItemListBinding
 import com.userstipa.currency.domain.model.Currency
 
 interface SearchAdapterListener {
@@ -26,7 +26,7 @@ class SearchAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            HomeItemListBinding.inflate(
+            SearchItemListBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -57,7 +57,7 @@ class SearchAdapter(
         }
     }
 
-    inner class Holder(val binding: HomeItemListBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class Holder(val binding: SearchItemListBinding) : RecyclerView.ViewHolder(binding.root)
 
     inner class DiffUtilCallback : DiffUtil.ItemCallback<Currency>() {
         override fun areItemsTheSame(oldItem: Currency, newItem: Currency): Boolean {

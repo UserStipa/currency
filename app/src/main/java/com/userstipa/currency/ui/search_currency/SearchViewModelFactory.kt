@@ -10,9 +10,9 @@ class SearchViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         val application =
             checkNotNull(extras[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY])
-        val getRemoteCurrencies = (application as App).appComponent.getRemoteCurrencies()
-        val addCurrency = application.appComponent.getAddCurrency()
-        val removeCurrency = application.appComponent.getRemoveCurrency()
+        val getRemoteCurrencies = (application as App).appComponent.useCaseGetAllCurrencies()
+        val addCurrency = application.appComponent.useCaseAddCurrency()
+        val removeCurrency = application.appComponent.useCaseRemoveCurrency()
         val dispatcherProvider = application.appComponent.getDispatcherProvider()
         return SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcherProvider) as T
     }

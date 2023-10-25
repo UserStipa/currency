@@ -12,8 +12,8 @@ class RepositoryImpl @Inject constructor(
     private val preferences: Preferences
 ) : Repository {
 
-    override suspend fun getRemoteCurrencies(vararg ids: String): Response<GetCurrenciesDto> {
-        TODO("Not yet implemented")
+    override suspend fun getRemoteCurrencies(ids: String): Response<GetCurrenciesDto> {
+        return api.getCurrencies(ids)
     }
 
     override suspend fun getRemoteCurrencies(): Response<GetCurrenciesDto> {

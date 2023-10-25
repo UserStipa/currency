@@ -7,7 +7,7 @@ data class CurrencyDto(
     val marketCapUsd: String,
     val maxSupply: String,
     val name: String,
-    val priceUsd: String,
+    var priceUsd: Double,
     val rank: String,
     val supply: String,
     val symbol: String,

@@ -6,12 +6,16 @@ import com.userstipa.currency.data.local.Preferences
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.data.repository.RepositoryImpl
 import com.userstipa.currency.domain.mapper.CurrencyMapper
+import com.userstipa.currency.domain.mapper.CurrencyPriceMapper
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
-import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrencies
-import com.userstipa.currency.domain.usecases.get_remote_currencies.GetRemoteCurrenciesImpl
+import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
+import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesImpl
+import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
+import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrenciesImpl
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrencyImpl
 import dagger.Module
@@ -29,8 +33,8 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun provideGetRemoteCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, Currency>): GetRemoteCurrencies {
-        return GetRemoteCurrenciesImpl(repository, mapper)
+    fun provideGetRemoteCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, Currency>): GetAllCurrencies {
+        return GetAllCurrenciesImpl(repository, mapper)
     }
 
     @Provides
@@ -47,7 +51,19 @@ class DomainModule {
 
     @Provides
     @Singleton
+    fun provideGetMyCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, CurrencyPrice>): GetMyCurrencies {
+        return GetMyCurrenciesImpl(repository, mapper)
+    }
+
+    @Provides
+    @Singleton
     fun provideCurrencyMapper(): Mapper<CurrencyDto, Currency> {
         return CurrencyMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyPriceMapper(): Mapper<CurrencyDto, CurrencyPrice> {
+        return CurrencyPriceMapper()
     }
 }

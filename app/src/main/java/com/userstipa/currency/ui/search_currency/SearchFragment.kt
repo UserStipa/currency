@@ -14,7 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.userstipa.currency.App
-import com.userstipa.currency.databinding.FragmentSecondBinding
+import com.userstipa.currency.databinding.FragmentSearchBinding
 import com.userstipa.currency.domain.model.Currency
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -26,7 +26,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     lateinit var viewModelFactory: SearchViewModelFactory
     private val viewModel by viewModels<SearchViewModel> { viewModelFactory }
     private val adapter = SearchAdapter(this)
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
 
@@ -39,7 +39,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
 
     }

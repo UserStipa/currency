@@ -1,36 +1,30 @@
-package com.userstipa.currency.domain.usecases.get_remote_currencies
+package com.userstipa.currency.domain.usecases.get_my_currencies
 
 import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.Mapper
-import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.model.CurrencyPrice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetRemoteCurrenciesImpl @Inject constructor(
+class GetMyCurrenciesImpl @Inject constructor(
     private val repository: Repository,
-    private val mapper: Mapper<CurrencyDto, Currency>
-) : GetRemoteCurrencies {
+    private val mapper: Mapper<CurrencyDto, CurrencyPrice>
+) : GetMyCurrencies {
 
-    override fun launch(): Flow<Resource<List<Currency>>> = flow {
+    override suspend fun launch(): Flow<Resource<List<CurrencyPrice>>> = flow {
         try {
             emit(Resource.Loading())
-            val networkResult = repository.getRemoteCurrencies()
+            val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
+            val networkResult = repository.getRemoteCurrencies(myCurrenciesIds.joinToString(","))
             val data = networkResult.body()!!.data
             val remoteCurrencies = mapper.map(data)
-
-            val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
-            remoteCurrencies.forEach { remoteCurrency ->
-                remoteCurrency.isEnableCheckbox = (myCurrenciesIds.contains(remoteCurrency.id))
-            }
             emit(Resource.Success(remoteCurrencies))
         } catch (e: Throwable) {
             emit(Resource.Error(e))
         }
     }
-
-
 }
