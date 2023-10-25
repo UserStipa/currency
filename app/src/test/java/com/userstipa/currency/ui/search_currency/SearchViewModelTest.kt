@@ -4,7 +4,7 @@ import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.testUtil.AddCurrencyFake
 import com.userstipa.currency.testUtil.DispatcherProviderFake
-import com.userstipa.currency.testUtil.GetRemoteCurrenciesFake
+import com.userstipa.currency.testUtil.GetAllCurrenciesFake
 import com.userstipa.currency.testUtil.RemoveCurrencyFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
@@ -14,7 +14,7 @@ import org.junit.Test
 class SearchViewModelTest {
 
     private lateinit var viewModel: SearchViewModel
-    private lateinit var getRemoteCurrencies: GetRemoteCurrenciesFake
+    private lateinit var getRemoteCurrencies: GetAllCurrenciesFake
     private lateinit var addCurrency: AddCurrencyFake
     private lateinit var removeCurrency: RemoveCurrencyFake
     private lateinit var dispatcher: DispatcherProviderFake
@@ -22,7 +22,7 @@ class SearchViewModelTest {
     @Before
     fun setUp() {
         dispatcher = DispatcherProviderFake()
-        getRemoteCurrencies = GetRemoteCurrenciesFake()
+        getRemoteCurrencies = GetAllCurrenciesFake()
         addCurrency = AddCurrencyFake()
         removeCurrency = RemoveCurrencyFake()
         viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcher)

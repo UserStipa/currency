@@ -6,6 +6,7 @@ import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.CurrencyMapper
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesImpl
 import com.userstipa.currency.testUtil.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
@@ -19,13 +20,13 @@ import retrofit2.Response
 
 class GetRemoteCurrenciesTest {
 
-    private lateinit var getRemoteCurrencies: GetRemoteCurrencies
+    private lateinit var getRemoteCurrencies: GetAllCurrenciesImpl
     private lateinit var repositoryFake: RepositoryFake
 
     @Before
     fun setUp() {
         repositoryFake = RepositoryFake()
-        getRemoteCurrencies = GetRemoteCurrenciesImpl(repositoryFake, CurrencyMapper())
+        getRemoteCurrencies = GetAllCurrenciesImpl(repositoryFake, CurrencyMapper())
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -41,7 +42,7 @@ class GetRemoteCurrenciesTest {
                 marketCapUsd = "669720933191.1164966118771744",
                 maxSupply = "21000000.0000000000000000",
                 name = "Bitcoin",
-                priceUsd = "34312.7928147515751837",
+                priceUsd = 34312.7928147515751837,
                 rank = "1",
                 supply = "19518112.0000000000000000",
                 symbol = "BTC",
@@ -55,7 +56,7 @@ class GetRemoteCurrenciesTest {
                 marketCapUsd = "214877322599.5196305515861831",
                 maxSupply = "null",
                 name = "Ethereum",
-                priceUsd = "1786.7197598854497559",
+                priceUsd = 1786.7197598854497559,
                 rank = "2",
                 supply = "120263584.3761507700000000",
                 symbol = "ETH",

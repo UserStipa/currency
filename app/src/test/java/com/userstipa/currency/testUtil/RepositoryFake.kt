@@ -11,7 +11,7 @@ class RepositoryFake : Repository {
 
     private val preferencesFake = mutableMapOf<String, Set<String>>()
 
-    override suspend fun getRemoteCurrencies(vararg ids: String): Response<GetCurrenciesDto> {
+    override suspend fun getRemoteCurrencies(ids: String): Response<GetCurrenciesDto> {
         return result!!
     }
 
