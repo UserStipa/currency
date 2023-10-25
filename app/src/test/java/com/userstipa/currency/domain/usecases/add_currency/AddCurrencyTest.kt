@@ -8,7 +8,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
-class AddCurrencyImplTest {
+class AddCurrencyTest {
 
     private lateinit var addCurrency: AddCurrencyImpl
     private lateinit var repositoryFake: RepositoryFake

@@ -47,7 +47,7 @@ class SearchViewModelTest {
         viewModel.fetchData()
         val list = listOf(
             Currency("bitcoin1", "Bitcoin_0", "BTC_0", false),
-            Currency("bitcoin2", "Bitcoin_1", "BTC_1", false),
+            Currency("bitcoin2", "Bitcoin_1", "BTC_1", true),
             Currency("bitcoin3", "Bitcoin_2", "BTC_2", false),
             Currency("bitcoin4", "Bitcoin_3", "BTC_3", false),
         )
