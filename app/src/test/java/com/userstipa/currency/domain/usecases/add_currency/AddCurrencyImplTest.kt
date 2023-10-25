@@ -27,7 +27,8 @@ class AddCurrencyImplTest {
         val newCurrency = Currency(
             id = "bitcoin3",
             name = "Bitcoin_3",
-            symbol = "BTC"
+            symbol = "BTC",
+            isEnableCheckbox = false
         )
         addCurrency.launch(newCurrency)
 
@@ -41,7 +42,8 @@ class AddCurrencyImplTest {
         val newCurrency = Currency(
             id = "bitcoin3",
             name = "Bitcoin_3",
-            symbol = "BTC"
+            symbol = "BTC",
+            isEnableCheckbox = false
         )
         addCurrency.launch(newCurrency)
 

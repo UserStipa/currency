@@ -5,6 +5,7 @@ import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.testUtil.AddCurrencyFake
 import com.userstipa.currency.testUtil.DispatcherProviderFake
 import com.userstipa.currency.testUtil.GetRemoteCurrenciesFake
+import com.userstipa.currency.testUtil.RemoveCurrencyFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
@@ -15,6 +16,7 @@ class SearchViewModelTest {
     private lateinit var viewModel: SearchViewModel
     private lateinit var getRemoteCurrencies: GetRemoteCurrenciesFake
     private lateinit var addCurrency: AddCurrencyFake
+    private lateinit var removeCurrency: RemoveCurrencyFake
     private lateinit var dispatcher: DispatcherProviderFake
 
     @Before
@@ -22,7 +24,8 @@ class SearchViewModelTest {
         dispatcher = DispatcherProviderFake()
         getRemoteCurrencies = GetRemoteCurrenciesFake()
         addCurrency = AddCurrencyFake()
-        viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, dispatcher)
+        removeCurrency = RemoveCurrencyFake()
+        viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcher)
     }
 
     @Test
@@ -43,10 +46,10 @@ class SearchViewModelTest {
     fun `getUiState - get list successful state`() = runTest {
         viewModel.fetchData()
         val list = listOf(
-            Currency("bitcoin1", "Bitcoin_0", "BTC_0"),
-            Currency("bitcoin2", "Bitcoin_1", "BTC_1"),
-            Currency("bitcoin3", "Bitcoin_2", "BTC_2"),
-            Currency("bitcoin4", "Bitcoin_3", "BTC_3"),
+            Currency("bitcoin1", "Bitcoin_0", "BTC_0", false),
+            Currency("bitcoin2", "Bitcoin_1", "BTC_1", false),
+            Currency("bitcoin3", "Bitcoin_2", "BTC_2", false),
+            Currency("bitcoin4", "Bitcoin_3", "BTC_3", false),
         )
         getRemoteCurrencies.emit(Resource.Success(list))
 
@@ -66,7 +69,7 @@ class SearchViewModelTest {
 
     @Test
     fun `add currency`() = runTest {
-        val expectedValue = Currency("bitcoin1", "Bitcoin_0", "BTC_0")
+        val expectedValue = Currency("bitcoin1", "Bitcoin_0", "BTC_0", false)
         viewModel.addCurrency(expectedValue)
         Assert.assertEquals(expectedValue, addCurrency.result)
     }
