@@ -54,7 +54,7 @@ class HomeViewModel @Inject constructor(
     fun subscribeNewPrices() {
         webSocketScope.launch {
             newCurrenciesPrices.subscribe(this).collect {
-
+                _uiState.update { it.copy() }
             }
         }.invokeOnCompletion {
             newCurrenciesPrices.unsubscribe()

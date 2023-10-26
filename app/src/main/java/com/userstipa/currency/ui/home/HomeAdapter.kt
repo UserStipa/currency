@@ -6,13 +6,13 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.userstipa.currency.databinding.HomeItemListBinding
-import com.userstipa.currency.domain.model.CurrencyPrice
+import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
 class HomeAdapter : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
 
-    var list: List<CurrencyPrice>
+    var list: List<CurrencyPriceDetail>
         get() = diffUtil.currentList
         set(value) = diffUtil.submitList(value)
 
@@ -41,12 +41,12 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     inner class Holder(val binding: HomeItemListBinding) : RecyclerView.ViewHolder(binding.root)
 
-    inner class DiffUtilCallback : DiffUtil.ItemCallback<CurrencyPrice>() {
-        override fun areItemsTheSame(oldItem: CurrencyPrice, newItem: CurrencyPrice): Boolean {
+    inner class DiffUtilCallback : DiffUtil.ItemCallback<CurrencyPriceDetail>() {
+        override fun areItemsTheSame(oldItem: CurrencyPriceDetail, newItem: CurrencyPriceDetail): Boolean {
             return oldItem.name == newItem.name
         }
 
-        override fun areContentsTheSame(oldItem: CurrencyPrice, newItem: CurrencyPrice): Boolean {
+        override fun areContentsTheSame(oldItem: CurrencyPriceDetail, newItem: CurrencyPriceDetail): Boolean {
             return oldItem == newItem
         }
 
