@@ -6,10 +6,13 @@ import com.userstipa.currency.data.local.Preferences
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.data.repository.RepositoryImpl
 import com.userstipa.currency.data.websocket.CryptocurrencyWebSocket
+import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.domain.mapper.CurrencyMapper
+import com.userstipa.currency.domain.mapper.CurrencyPriceDetailMapper
 import com.userstipa.currency.domain.mapper.CurrencyPriceMapper
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
@@ -30,13 +33,20 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun providerRepository(api: CryptocurrencyApi, webSocket: CryptocurrencyWebSocket, preferences: Preferences): Repository {
+    fun providerRepository(
+        api: CryptocurrencyApi,
+        webSocket: CryptocurrencyWebSocket,
+        preferences: Preferences
+    ): Repository {
         return RepositoryImpl(api, webSocket, preferences)
     }
 
     @Provides
     @Singleton
-    fun provideGetRemoteCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, Currency>): GetAllCurrencies {
+    fun provideGetRemoteCurrencies(
+        repository: Repository,
+        mapper: Mapper<CurrencyDto, Currency>
+    ): GetAllCurrencies {
         return GetAllCurrenciesImpl(repository, mapper)
     }
 
@@ -54,14 +64,20 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun provideGetMyCurrencies(repository: Repository, mapper: Mapper<CurrencyDto, CurrencyPriceDetail>): GetMyCurrencies {
+    fun provideGetMyCurrencies(
+        repository: Repository,
+        mapper: Mapper<CurrencyDto, CurrencyPriceDetail>
+    ): GetMyCurrencies {
         return GetMyCurrenciesImpl(repository, mapper)
     }
 
     @Provides
     @Singleton
-    fun provideGetNewCurrencies(repository: Repository): NewCurrenciesPrices {
-        return NewCurrenciesPricesImpl(repository)
+    fun provideGetNewCurrencies(
+        repository: Repository,
+        mapper: Mapper<CurrencyPriceDto, CurrencyPrice>
+    ): NewCurrenciesPrices {
+        return NewCurrenciesPricesImpl(repository, mapper)
     }
 
     @Provides
@@ -72,7 +88,13 @@ class DomainModule {
 
     @Provides
     @Singleton
-    fun provideCurrencyPriceMapper(): Mapper<CurrencyDto, CurrencyPriceDetail> {
+    fun provideCurrencyPriceDetailMapper(): Mapper<CurrencyDto, CurrencyPriceDetail> {
+        return CurrencyPriceDetailMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyPriceMapper(): Mapper<CurrencyPriceDto, CurrencyPrice> {
         return CurrencyPriceMapper()
     }
 }
