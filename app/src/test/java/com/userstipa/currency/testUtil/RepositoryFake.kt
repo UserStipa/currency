@@ -3,6 +3,9 @@ package com.userstipa.currency.testUtil
 import com.userstipa.currency.data.api.GetCurrenciesDto
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.repository.Repository
+import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
 class RepositoryFake : Repository {
@@ -14,7 +17,6 @@ class RepositoryFake : Repository {
 
     override suspend fun getRemoteCurrencies(ids: String): Response<GetCurrenciesDto> {
         this.ids = ids
-        println("set ids")
         return result!!
     }
 
@@ -28,5 +30,13 @@ class RepositoryFake : Repository {
 
     override suspend fun getPreferences(key: PreferencesKeys): Set<String> {
         return preferencesFake[key.name] ?: emptySet()
+    }
+
+    override fun openWebSocket(scope: CoroutineScope, ids: String): Flow<CurrencyPriceWrapperDto> {
+        TODO("Not yet implemented")
+    }
+
+    override fun closeWebSocket() {
+        TODO("Not yet implemented")
     }
 }

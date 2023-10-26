@@ -4,8 +4,9 @@ import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.api.GetCurrenciesDto
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.domain.Resource
-import com.userstipa.currency.domain.mapper.CurrencyPriceMapper
+import com.userstipa.currency.domain.mapper.CurrencyPriceDetailMapper
 import com.userstipa.currency.domain.model.CurrencyPrice
+import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.testUtil.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -26,7 +27,7 @@ class GetMyCurrenciesImplTest {
     @Before
     fun setUp() {
         repositoryFake = RepositoryFake()
-        getMyCurrenciesImpl = GetMyCurrenciesImpl(repositoryFake, CurrencyPriceMapper())
+        getMyCurrenciesImpl = GetMyCurrenciesImpl(repositoryFake, CurrencyPriceDetailMapper())
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -54,7 +55,7 @@ class GetMyCurrenciesImplTest {
                 timestamp = "000000"
             )
         )
-        val values = mutableListOf<Resource<List<CurrencyPrice>>>()
+        val values = mutableListOf<Resource<List<CurrencyPriceDetail>>>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             getMyCurrenciesImpl.launch().toList(values)
         }
@@ -62,7 +63,7 @@ class GetMyCurrenciesImplTest {
         val expectedValueLoading = Resource.Loading<List<CurrencyPrice>>()
         val expectedValueResult = Resource.Success(
             data = listOf(
-                CurrencyPrice(
+                CurrencyPriceDetail(
                     id = "bitcoin",
                     name = "Bitcoin",
                     symbol = "BTC",
