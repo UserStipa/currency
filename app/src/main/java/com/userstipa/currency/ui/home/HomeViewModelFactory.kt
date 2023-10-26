@@ -11,7 +11,8 @@ class HomeViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T {
         val application = checkNotNull(extras[APPLICATION_KEY])
         val getMyCurrencies = (application as App).appComponent.useCaseGetMyCurrencies()
+        val getNewCurrencies = application.appComponent.useCaseGetNewCurrencies()
         val dispatcherProvider = application.appComponent.getDispatcherProvider()
-        return HomeViewModel(getMyCurrencies, dispatcherProvider) as T
+        return HomeViewModel(getMyCurrencies, getNewCurrencies, dispatcherProvider) as T
     }
 }

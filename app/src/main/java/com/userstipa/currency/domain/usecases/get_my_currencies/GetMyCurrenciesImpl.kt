@@ -5,17 +5,17 @@ import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.Mapper
-import com.userstipa.currency.domain.model.CurrencyPrice
+import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetMyCurrenciesImpl @Inject constructor(
     private val repository: Repository,
-    private val mapper: Mapper<CurrencyDto, CurrencyPrice>
+    private val mapper: Mapper<CurrencyDto, CurrencyPriceDetail>
 ) : GetMyCurrencies {
 
-    override suspend fun launch(): Flow<Resource<List<CurrencyPrice>>> = flow {
+    override suspend fun launch(): Flow<Resource<List<CurrencyPriceDetail>>> = flow {
         try {
             emit(Resource.Loading())
             val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
