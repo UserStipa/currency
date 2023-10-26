@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import com.userstipa.currency.domain.Resource
+import com.userstipa.currency.domain.model.CurrencyPrice
+import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
 import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
 import kotlinx.coroutines.CoroutineScope
@@ -53,16 +55,30 @@ class HomeViewModel @Inject constructor(
 
     fun subscribeNewPrices() {
         webSocketScope.launch {
-            newCurrenciesPrices.subscribe(this).collect {
-
+            newCurrenciesPrices.subscribe(this).collect { newPrices ->
+                _uiState.update { uiState ->
+                    uiState.copy(list = updateListByNewPrices(newPrices))
+                }
             }
-        }.invokeOnCompletion {
-            newCurrenciesPrices.unsubscribe()
         }
     }
 
-
     fun unsubscribeNewPrices() {
+        newCurrenciesPrices.unsubscribe()
         webSocketScope.coroutineContext.cancelChildren()
+    }
+
+    private fun updateListByNewPrices(newPrices: List<CurrencyPrice>): List<CurrencyPriceDetail> {
+        val currentCurrencies = uiState.value.list
+        val updatedCurrencies = mutableListOf<CurrencyPriceDetail>()
+        for (currency in currentCurrencies) {
+            val newPrice = newPrices.find { it.id == currency.id }
+            if (newPrice == null) {
+                updatedCurrencies.add(currency)
+            } else {
+                updatedCurrencies.add(currency.copy(priceUsd = newPrice.priceUsd))
+            }
+        }
+        return updatedCurrencies
     }
 }

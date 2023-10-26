@@ -43,7 +43,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     inner class DiffUtilCallback : DiffUtil.ItemCallback<CurrencyPriceDetail>() {
         override fun areItemsTheSame(oldItem: CurrencyPriceDetail, newItem: CurrencyPriceDetail): Boolean {
-            return oldItem.name == newItem.name
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: CurrencyPriceDetail, newItem: CurrencyPriceDetail): Boolean {
