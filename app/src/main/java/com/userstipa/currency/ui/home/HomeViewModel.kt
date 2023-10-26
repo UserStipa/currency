@@ -5,6 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
+import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,9 +18,11 @@ import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
     private val getMyCurrencies: GetMyCurrencies,
+    private val newCurrenciesPrices: NewCurrenciesPrices,
     private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
+    private val webSocketScope = CoroutineScope(Job())
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
@@ -25,8 +31,12 @@ class HomeViewModel @Inject constructor(
             getMyCurrencies.launch().collect { result ->
                 when (result) {
                     is Resource.Error -> {
-                        _uiState.update { it.copy(isLoading = false, error = result.exception.message) }
-                        result.exception.printStackTrace()
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                error = result.exception.message
+                            )
+                        }
                     }
 
                     is Resource.Loading -> {
@@ -39,5 +49,20 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun subscribeNewPrices() {
+        webSocketScope.launch {
+            newCurrenciesPrices.subscribe(this).collect {
+
+            }
+        }.invokeOnCompletion {
+            newCurrenciesPrices.unsubscribe()
+        }
+    }
+
+
+    fun unsubscribeNewPrices() {
+        webSocketScope.coroutineContext.cancelChildren()
     }
 }

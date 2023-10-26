@@ -40,12 +40,12 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        viewModel.fetchData()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchData()
         setAdapter()
         setUi()
         setObservers()
@@ -72,6 +72,16 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.subscribeNewPrices()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.unsubscribeNewPrices()
     }
 
     private fun showMessage(text: String) {
