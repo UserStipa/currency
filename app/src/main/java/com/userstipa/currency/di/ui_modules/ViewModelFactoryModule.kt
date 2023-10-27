@@ -1,4 +1,4 @@
-package com.userstipa.currency.di
+package com.userstipa.currency.di.ui_modules
 
 import com.userstipa.currency.ui.home.HomeViewModelFactory
 import com.userstipa.currency.ui.search_currency.SearchViewModelFactory

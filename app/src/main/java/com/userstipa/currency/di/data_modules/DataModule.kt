@@ -1,4 +1,4 @@
-package com.userstipa.currency.di
+package com.userstipa.currency.di.data_modules
 
 import android.content.Context
 import com.google.gson.Gson

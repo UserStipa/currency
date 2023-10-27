@@ -1,7 +1,12 @@
 package com.userstipa.currency.di
 
 import android.content.Context
+import com.userstipa.currency.di.data_modules.DataModule
+import com.userstipa.currency.di.dispatchers.DispatcherModule
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
+import com.userstipa.currency.di.domain_modules.DomainModule
+import com.userstipa.currency.di.domain_modules.MapperModule
+import com.userstipa.currency.di.ui_modules.ViewModelFactoryModule
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
@@ -13,7 +18,13 @@ import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-@Component(modules = [DataModule::class, ViewModelFactoryModule::class, DomainModule::class, DispatcherModule::class])
+@Component(modules = [
+    DataModule::class,
+    ViewModelFactoryModule::class,
+    DomainModule::class,
+    DispatcherModule::class,
+    MapperModule::class
+])
 @Singleton
 interface AppComponent {
 
