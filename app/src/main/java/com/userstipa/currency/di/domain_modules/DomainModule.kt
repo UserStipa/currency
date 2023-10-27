@@ -1,11 +1,7 @@
 package com.userstipa.currency.di.domain_modules
 
-import com.userstipa.currency.data.api.CryptocurrencyApi
 import com.userstipa.currency.data.api.CurrencyDto
-import com.userstipa.currency.data.local.Preferences
 import com.userstipa.currency.data.repository.Repository
-import com.userstipa.currency.data.repository.RepositoryImpl
-import com.userstipa.currency.data.websocket.CryptocurrencyWebSocket
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.Currency
@@ -27,16 +23,6 @@ import javax.inject.Singleton
 
 @Module
 class DomainModule {
-
-    @Provides
-    @Singleton
-    fun providerRepository(
-        api: CryptocurrencyApi,
-        webSocket: CryptocurrencyWebSocket,
-        preferences: Preferences
-    ): Repository {
-        return RepositoryImpl(api, webSocket, preferences)
-    }
 
     @Provides
     @Singleton

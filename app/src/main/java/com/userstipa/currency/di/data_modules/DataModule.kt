@@ -6,6 +6,8 @@ import com.google.gson.GsonBuilder
 import com.userstipa.currency.data.api.CryptocurrencyApi
 import com.userstipa.currency.data.local.Preferences
 import com.userstipa.currency.data.local.PreferencesImpl
+import com.userstipa.currency.data.repository.Repository
+import com.userstipa.currency.data.repository.RepositoryImpl
 import com.userstipa.currency.data.websocket.CryptocurrencyWebSocket
 import com.userstipa.currency.data.websocket.CryptocurrencyWebSocketImpl
 import com.userstipa.currency.data.websocket.CurrencyPriceAdapter
@@ -59,6 +61,16 @@ class DataModule {
         return GsonBuilder()
             .registerTypeAdapter(CurrencyPriceWrapperDto::class.java, CurrencyPriceAdapter())
             .create()
+    }
+
+    @Provides
+    @Singleton
+    fun providerRepository(
+        api: CryptocurrencyApi,
+        webSocket: CryptocurrencyWebSocket,
+        preferences: Preferences
+    ): Repository {
+        return RepositoryImpl(api, webSocket, preferences)
     }
 
 }

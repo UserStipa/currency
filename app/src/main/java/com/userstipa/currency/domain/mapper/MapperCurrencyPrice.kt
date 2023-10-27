@@ -5,7 +5,7 @@ import com.userstipa.currency.domain.model.CurrencyPrice
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 
-class CurrencyPriceMapper : Mapper<CurrencyPriceDto, CurrencyPrice> {
+class MapperCurrencyPrice : Mapper<CurrencyPriceDto, CurrencyPrice> {
 
     override fun map(input: List<CurrencyPriceDto>): List<CurrencyPrice> {
         val symbols = DecimalFormatSymbols().apply { groupingSeparator = ' ' }
