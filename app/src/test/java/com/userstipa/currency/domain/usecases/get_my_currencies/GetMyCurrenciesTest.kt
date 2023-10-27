@@ -19,7 +19,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
 
-class GetMyCurrenciesImplTest {
+class GetMyCurrenciesTest {
 
     private lateinit var getMyCurrenciesImpl: GetMyCurrenciesImpl
     private lateinit var repositoryFake: RepositoryFake

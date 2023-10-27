@@ -6,12 +6,16 @@ import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.takeWhile
 import retrofit2.Response
 
 class RepositoryFake : Repository {
 
     var result: Response<GetCurrenciesDto>? = null
     var ids: String? = null
+    val webSocketFlow = MutableSharedFlow<CurrencyPriceWrapperDto>()
+    var isWebSocketFlowOpen = true
 
     private val preferencesFake = mutableMapOf<String, Set<String>>()
 
@@ -33,10 +37,10 @@ class RepositoryFake : Repository {
     }
 
     override fun openWebSocket(scope: CoroutineScope, ids: String): Flow<CurrencyPriceWrapperDto> {
-        TODO("Not yet implemented")
+        return webSocketFlow.takeWhile { isWebSocketFlowOpen }
     }
 
     override fun closeWebSocket() {
-        TODO("Not yet implemented")
+        isWebSocketFlowOpen = false
     }
 }
