@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.userstipa.currency.databinding.SearchItemListBinding
 import com.userstipa.currency.domain.model.Currency
 
@@ -23,6 +24,10 @@ class SearchAdapter(
         get() = diffUtil.currentList
         set(value) = diffUtil.submitList(value)
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
