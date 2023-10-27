@@ -19,10 +19,15 @@ class GetMyCurrenciesImpl @Inject constructor(
         try {
             emit(Resource.Loading())
             val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
-            val networkResult = repository.getRemoteCurrencies(myCurrenciesIds.joinToString(","))
-            val data = networkResult.body()!!.data
-            val remoteCurrencies = mapper.map(data)
-            emit(Resource.Success(remoteCurrencies))
+            if (myCurrenciesIds.isEmpty()) {
+                emit(Resource.Success(emptyList()))
+            } else {
+                val networkResult =
+                    repository.getRemoteCurrencies(myCurrenciesIds.joinToString(","))
+                val data = networkResult.body()!!.data
+                val remoteCurrencies = mapper.map(data)
+                emit(Resource.Success(remoteCurrencies))
+            }
         } catch (e: Throwable) {
             emit(Resource.Error(e))
         }
