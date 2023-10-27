@@ -2,7 +2,7 @@ package com.userstipa.currency.domain.usecases.new_currencies_prices
 
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
-import com.userstipa.currency.domain.mapper.CurrencyPriceMapper
+import com.userstipa.currency.domain.mapper.MapperCurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +22,7 @@ class NewCurrenciesPricesTest {
     @Before
     fun setUp() {
         repositoryFake = RepositoryFake()
-        newCurrenciesPricesImpl = NewCurrenciesPricesImpl(repositoryFake, CurrencyPriceMapper())
+        newCurrenciesPricesImpl = NewCurrenciesPricesImpl(repositoryFake, MapperCurrencyPrice())
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -100,7 +100,10 @@ class NewCurrenciesPricesTest {
             )
         )
         val expectedValues = listOf(
-            listOf(CurrencyPrice(id = "bitcoin", priceUsd = "24,00"), CurrencyPrice(id = "ethereum", priceUsd = "1 200,09")),
+            listOf(
+                CurrencyPrice(id = "bitcoin", priceUsd = "24,00"),
+                CurrencyPrice(id = "ethereum", priceUsd = "1 200,09")
+            ),
             listOf(CurrencyPrice(id = "bitcoin", priceUsd = "30,00"))
         )
         Assert.assertEquals(expectedValues, results)

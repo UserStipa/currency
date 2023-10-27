@@ -4,7 +4,7 @@ import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.api.GetCurrenciesDto
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.domain.Resource
-import com.userstipa.currency.domain.mapper.CurrencyMapper
+import com.userstipa.currency.domain.mapper.MapperCurrency
 import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,7 +25,7 @@ class GetAllCurrenciesTest {
     @Before
     fun setUp() {
         repositoryFake = RepositoryFake()
-        getRemoteCurrencies = GetAllCurrenciesImpl(repositoryFake, CurrencyMapper())
+        getRemoteCurrencies = GetAllCurrenciesImpl(repositoryFake, MapperCurrency())
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
