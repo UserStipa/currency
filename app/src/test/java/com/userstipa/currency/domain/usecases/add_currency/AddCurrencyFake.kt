@@ -1,9 +1,8 @@
-package com.userstipa.currency.testUtil
+package com.userstipa.currency.domain.usecases.add_currency
 
 import com.userstipa.currency.domain.model.Currency
-import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 
-class RemoveCurrencyFake : RemoveCurrency {
+class AddCurrencyFake : AddCurrency {
 
     var result: Currency? = null
 

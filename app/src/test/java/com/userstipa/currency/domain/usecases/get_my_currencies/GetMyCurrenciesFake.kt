@@ -1,8 +1,7 @@
-package com.userstipa.currency.testUtil
+package com.userstipa.currency.domain.usecases.get_my_currencies
 
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
-import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 

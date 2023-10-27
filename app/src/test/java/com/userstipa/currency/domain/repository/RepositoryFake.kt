@@ -1,4 +1,4 @@
-package com.userstipa.currency.testUtil
+package com.userstipa.currency.domain.repository
 
 import com.userstipa.currency.data.api.GetCurrenciesDto
 import com.userstipa.currency.data.local.PreferencesKeys

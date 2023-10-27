@@ -7,7 +7,7 @@ import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.CurrencyPriceDetailMapper
 import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
-import com.userstipa.currency.testUtil.RepositoryFake
+import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.toList

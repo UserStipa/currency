@@ -1,7 +1,6 @@
-package com.userstipa.currency.testUtil
+package com.userstipa.currency.domain.usecases.new_currencies_prices
 
 import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow

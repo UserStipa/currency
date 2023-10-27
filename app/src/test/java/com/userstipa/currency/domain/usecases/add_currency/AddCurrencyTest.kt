@@ -2,7 +2,7 @@ package com.userstipa.currency.domain.usecases.add_currency
 
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.domain.model.Currency
-import com.userstipa.currency.testUtil.RepositoryFake
+import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before

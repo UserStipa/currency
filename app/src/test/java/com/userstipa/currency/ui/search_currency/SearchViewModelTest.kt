@@ -2,10 +2,10 @@ package com.userstipa.currency.ui.search_currency
 
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
-import com.userstipa.currency.testUtil.AddCurrencyFake
+import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyFake
 import com.userstipa.currency.testUtil.DispatcherProviderFake
-import com.userstipa.currency.testUtil.GetAllCurrenciesFake
-import com.userstipa.currency.testUtil.RemoveCurrencyFake
+import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesFake
+import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrencyFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before

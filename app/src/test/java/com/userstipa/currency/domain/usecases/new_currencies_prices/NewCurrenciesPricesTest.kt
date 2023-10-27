@@ -4,7 +4,7 @@ import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
 import com.userstipa.currency.domain.mapper.CurrencyPriceMapper
 import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.testUtil.RepositoryFake
+import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch

@@ -4,8 +4,8 @@ import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.testUtil.DispatcherProviderFake
-import com.userstipa.currency.testUtil.GetMyCurrenciesFake
-import com.userstipa.currency.testUtil.NewCurrenciesPricesFake
+import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrenciesFake
+import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPricesFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before

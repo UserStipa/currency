@@ -6,7 +6,7 @@ import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.CurrencyMapper
 import com.userstipa.currency.domain.model.Currency
-import com.userstipa.currency.testUtil.RepositoryFake
+import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
