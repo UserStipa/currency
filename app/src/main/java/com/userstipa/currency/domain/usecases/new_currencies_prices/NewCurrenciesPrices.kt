@@ -1,12 +1,13 @@
 package com.userstipa.currency.domain.usecases.new_currencies_prices
 
+import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.CurrencyPrice
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 
 interface NewCurrenciesPrices {
 
-    suspend fun subscribe(scope: CoroutineScope): Flow<List<CurrencyPrice>>
+    suspend fun subscribe(scope: CoroutineScope): Flow<Resource<List<CurrencyPrice>>>
 
     fun unsubscribe()
 }
