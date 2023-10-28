@@ -81,7 +81,7 @@ class GetMyCurrenciesTest {
     }
 
     @Test
-    fun `launch - correct arguments`() = runTest {
+    fun `launch - validate arguments`() = runTest {
         repositoryFake.setPreferences(
             PreferencesKeys.MY_CURRENCIES,
             setOf("vechain", "bitcoin", "ethereum")
@@ -89,5 +89,22 @@ class GetMyCurrenciesTest {
         getMyCurrenciesImpl.launch().collect()
         val expectedValue = "vechain,bitcoin,ethereum"
         Assert.assertEquals(expectedValue, repositoryFake.ids)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `launch - empty myCurrenciesIds`() = runTest {
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf())
+
+        val values = mutableListOf<Resource<List<CurrencyPriceDetail>>>()
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            getMyCurrenciesImpl.launch().toList(values)
+        }
+
+        val expectedValueLoading = Resource.Loading<List<CurrencyPriceDetail>>()
+        val expectedValueResult = Resource.Success(emptyList<CurrencyPriceDetail>())
+
+        Assert.assertEquals(expectedValueLoading.javaClass.name, values[0].javaClass.name)
+        Assert.assertEquals(expectedValueResult, values[1])
     }
 }

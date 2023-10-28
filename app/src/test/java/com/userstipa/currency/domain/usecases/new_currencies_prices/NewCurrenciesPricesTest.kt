@@ -1,5 +1,6 @@
 package com.userstipa.currency.domain.usecases.new_currencies_prices
 
+import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
 import com.userstipa.currency.domain.mapper.MapperCurrencyPrice
@@ -28,6 +29,11 @@ class NewCurrenciesPricesTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun subscribe() = runTest {
+
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf(
+            "bitcoin", "ethereum"
+        ))
+
         val results = mutableListOf<List<CurrencyPrice>>()
         backgroundScope.launch(UnconfinedTestDispatcher()) {
             newCurrenciesPricesImpl.subscribe(this).toList(results)
@@ -69,7 +75,36 @@ class NewCurrenciesPricesTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun `subscribe - empty myCurrenciesIds`() = runTest {
+
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf())
+
+        val results = mutableListOf<List<CurrencyPrice>>()
+        backgroundScope.launch(UnconfinedTestDispatcher()) {
+            newCurrenciesPricesImpl.subscribe(this).toList(results)
+        }
+
+        repositoryFake.webSocketFlow.emit(
+            CurrencyPriceWrapperDto(
+                data = listOf(
+                    CurrencyPriceDto(id = "bitcoin", priceUsd = 24.0),
+                    CurrencyPriceDto(id = "ethereum", priceUsd = 1200.0903424)
+                )
+            )
+        )
+
+        val expectedValues = listOf<List<CurrencyPrice>>()
+        Assert.assertEquals(expectedValues, results)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
     fun unsubscribe() = runTest {
+
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf(
+            "bitcoin", "ethereum"
+        ))
+
         val results = mutableListOf<List<CurrencyPrice>>()
         backgroundScope.launch(UnconfinedTestDispatcher()) {
             newCurrenciesPricesImpl.subscribe(this).toList(results)
