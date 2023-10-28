@@ -22,8 +22,8 @@ class GetMyCurrenciesImpl @Inject constructor(
             if (myCurrenciesIds.isEmpty()) {
                 emit(Resource.Success(emptyList()))
             } else {
-                val networkResult =
-                    repository.getRemoteCurrencies(myCurrenciesIds.joinToString(","))
+                val query = myCurrenciesIds.joinToString(",")
+                val networkResult = repository.getRemoteCurrencies(query)
                 val data = networkResult.body()!!.data
                 val remoteCurrencies = mapper.map(data)
                 emit(Resource.Success(remoteCurrencies))

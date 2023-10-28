@@ -55,9 +55,17 @@ class HomeViewModel @Inject constructor(
 
     fun subscribeNewPrices() {
         webSocketScope.launch(dispatcher.io) {
-            newCurrenciesPrices.subscribe(this).collect { newPrices ->
-                _uiState.update { uiState ->
-                    uiState.copy(list = updateListByNewPrices(newPrices))
+            newCurrenciesPrices.subscribe(this).collect { result ->
+                when (result) {
+                    is Resource.Success -> {
+                        _uiState.update { it.copy(list = updateListByNewPrices(result.data)) }
+                    }
+
+                    is Resource.Error -> {
+                        _uiState.update { it.copy(error = result.exception.message) }
+                        unsubscribeNewPrices()
+                    }
+                    else -> {}
                 }
             }
         }
