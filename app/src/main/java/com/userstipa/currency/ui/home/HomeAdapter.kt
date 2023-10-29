@@ -40,7 +40,9 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.Holder>() {
         val currency = list[position]
         with(holder.binding) {
             name.text = currency.name
+            symbol.text = currency.symbol
             price.text = currency.priceUsd
+            changePercent24Hr.text = currency.changePercent24Hr
         }
     }
 
