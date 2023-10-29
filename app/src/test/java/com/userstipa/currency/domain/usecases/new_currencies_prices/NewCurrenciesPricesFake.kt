@@ -1,21 +1,16 @@
 package com.userstipa.currency.domain.usecases.new_currencies_prices
 
 import com.userstipa.currency.domain.model.CurrencyPrice
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.flow.flow
 
 class NewCurrenciesPricesFake : NewCurrenciesPrices {
 
-    val webSocketFlow = MutableSharedFlow<List<CurrencyPrice>>()
-    private var isWebSocketFlowOpen = true
+    var subscribeResult: List<CurrencyPrice>? = null
+    var subscribeError: Throwable? = null
 
-    override suspend fun subscribe(scope: CoroutineScope): Flow<List<CurrencyPrice>> {
-        return webSocketFlow.takeWhile { isWebSocketFlowOpen }
-    }
-
-    override fun unsubscribe() {
-        isWebSocketFlowOpen = false
+    override suspend fun subscribe(): Flow<List<CurrencyPrice>> = flow {
+        subscribeError?.let { throw it }
+        emit(subscribeResult!!)
     }
 }

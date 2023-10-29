@@ -1,19 +1,16 @@
 package com.userstipa.currency.domain.usecases.get_all_currencies
 
-import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flow
 
 class GetAllCurrenciesFake : GetAllCurrencies {
 
-    private var flow = MutableSharedFlow<Resource<List<Currency>>>()
+    var launchResult: List<Currency>? = null
+    var launchException: Throwable? = null
 
-    suspend fun emit(value: Resource<List<Currency>>) {
-        flow.emit(value)
-    }
-
-    override fun launch(): Flow<Resource<List<Currency>>> {
-        return flow
+    override fun launch(): Flow<List<Currency>> = flow {
+        launchException?.let { throw it }
+        emit(launchResult!!)
     }
 }

@@ -1,11 +1,10 @@
 package com.userstipa.currency.ui.search_currency
 
-import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyFake
-import com.userstipa.currency.testUtil.DispatcherProviderFake
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesFake
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrencyFake
+import com.userstipa.currency.testUtil.DispatcherProviderFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
@@ -28,42 +27,31 @@ class SearchViewModelTest {
         viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcher)
     }
 
-    @Test
-    fun `getUiState - init state`() = runTest {
-        val expectedValue = SearchUiState()
-        Assert.assertEquals(expectedValue, viewModel.uiState.value)
-    }
 
     @Test
-    fun `getUiState - loading state`() = runTest {
-        viewModel.fetchData()
-        getRemoteCurrencies.emit(Resource.Loading())
-        val expectedValue = SearchUiState(isLoading = true)
-        Assert.assertEquals(expectedValue, viewModel.uiState.value)
-    }
-
-    @Test
-    fun `getUiState - get list successful state`() = runTest {
-        viewModel.fetchData()
-        val list = listOf(
+    fun `get all currencies - successful`() = runTest {
+        val allCurrencies = listOf(
             Currency("bitcoin1", "Bitcoin_0", "BTC_0", false),
             Currency("bitcoin2", "Bitcoin_1", "BTC_1", true),
             Currency("bitcoin3", "Bitcoin_2", "BTC_2", false),
             Currency("bitcoin4", "Bitcoin_3", "BTC_3", false),
         )
-        getRemoteCurrencies.emit(Resource.Success(list))
+        val expectedValue = SearchUiState(list = allCurrencies)
 
-        val expectedValue = SearchUiState(list = list)
+        getRemoteCurrencies.launchResult = allCurrencies
+        viewModel.fetchData()
+
         Assert.assertEquals(expectedValue, viewModel.uiState.value)
     }
 
     @Test
-    fun `getUiState - get exception`() = runTest {
-        viewModel.fetchData()
+    fun `get all currencies - error`() = runTest {
         val exception = Exception("Test error")
-        getRemoteCurrencies.emit(Resource.Error(exception))
+        val expectedValue = SearchUiState(error = exception.message)
 
-        val expectedValue = SearchUiState(error = "Test error")
+        getRemoteCurrencies.launchException = exception
+        viewModel.fetchData()
+
         Assert.assertEquals(expectedValue, viewModel.uiState.value)
     }
 

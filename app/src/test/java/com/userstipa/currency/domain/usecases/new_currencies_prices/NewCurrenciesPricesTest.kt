@@ -6,10 +6,8 @@ import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
 import com.userstipa.currency.domain.mapper.MapperCurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.repository.RepositoryFake
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
@@ -26,121 +24,48 @@ class NewCurrenciesPricesTest {
         newCurrenciesPricesImpl = NewCurrenciesPricesImpl(repositoryFake, MapperCurrencyPrice())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun subscribe() = runTest {
+    fun `receive new prices by websocket - successful`() = runTest {
+        val myCurrenciesIds = setOf("bitcoin", "ethereum")
+        val newPrices = CurrencyPriceWrapperDto(
+            data = listOf(
+                CurrencyPriceDto(id = "bitcoin", priceUsd = 24.0),
+                CurrencyPriceDto(id = "ethereum", priceUsd = 1200.0903424)
+            )
+        )
+        val expectedNewPrices = listOf(
+            CurrencyPrice(id = "bitcoin", priceUsd = "24,00"),
+            CurrencyPrice(id = "ethereum", priceUsd = "1 200,09"),
+        )
 
-        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf(
-            "bitcoin", "ethereum"
-        ))
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
+        repositoryFake.openWebSocketResult = newPrices
+        val actualValue = newCurrenciesPricesImpl.subscribe().first()
 
-        val results = mutableListOf<List<CurrencyPrice>>()
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            newCurrenciesPricesImpl.subscribe(this).toList(results)
-        }
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(
-                    CurrencyPriceDto(id = "bitcoin", priceUsd = 24.0),
-                    CurrencyPriceDto(id = "ethereum", priceUsd = 1200.0903424)
-                )
-            )
-        )
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(CurrencyPriceDto(id = "bitcoin", priceUsd = 30.0))
-            )
-        )
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(
-                    CurrencyPriceDto(id = "bitcoin", priceUsd = 20.0),
-                    CurrencyPriceDto(id = "ethereum", priceUsd = 1200.1111)
-                )
-            )
-        )
-        val expectedValues = listOf(
-            listOf(
-                CurrencyPrice(id = "bitcoin", priceUsd = "24,00"),
-                CurrencyPrice(id = "ethereum", priceUsd = "1 200,09")
-            ),
-            listOf(CurrencyPrice(id = "bitcoin", priceUsd = "30,00")),
-            listOf(
-                CurrencyPrice(id = "bitcoin", priceUsd = "20,00"),
-                CurrencyPrice(id = "ethereum", priceUsd = "1 200,11")
-            ),
-        )
-        Assert.assertEquals(expectedValues, results)
+        Assert.assertEquals(expectedNewPrices, actualValue)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `subscribe - empty myCurrenciesIds`() = runTest {
+    fun `receive new prices by websocket - error`() = runTest {
+        val myCurrenciesIds = setOf("bitcoin", "ethereum")
+        val expectedValue = Exception("Test error")
 
-        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf())
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
+        repositoryFake.openWebSocketException = expectedValue
 
-        val results = mutableListOf<List<CurrencyPrice>>()
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            newCurrenciesPricesImpl.subscribe(this).toList(results)
+        newCurrenciesPricesImpl.subscribe().catch { actualException ->
+            Assert.assertEquals(expectedValue, actualException)
         }
-
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(
-                    CurrencyPriceDto(id = "bitcoin", priceUsd = 24.0),
-                    CurrencyPriceDto(id = "ethereum", priceUsd = 1200.0903424)
-                )
-            )
-        )
-
-        val expectedValues = listOf<List<CurrencyPrice>>()
-        Assert.assertEquals(expectedValues, results)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun unsubscribe() = runTest {
+    fun `websocket is close when my ids is empty`() = runTest {
+        val myCurrenciesIds = setOf<String>()
+        val expectedEmptyNewPrices = emptyList<CurrencyPrice>()
 
-        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf(
-            "bitcoin", "ethereum"
-        ))
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
+        val actualValue = newCurrenciesPricesImpl.subscribe().first()
 
-        val results = mutableListOf<List<CurrencyPrice>>()
-        backgroundScope.launch(UnconfinedTestDispatcher()) {
-            newCurrenciesPricesImpl.subscribe(this).toList(results)
-        }
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(
-                    CurrencyPriceDto(id = "bitcoin", priceUsd = 24.0),
-                    CurrencyPriceDto(id = "ethereum", priceUsd = 1200.0903424)
-                )
-            )
-        )
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(CurrencyPriceDto(id = "bitcoin", priceUsd = 30.0))
-            )
-        )
-
-        newCurrenciesPricesImpl.unsubscribe()
-
-
-        repositoryFake.webSocketFlow.emit(
-            CurrencyPriceWrapperDto(
-                data = listOf(
-                    CurrencyPriceDto(id = "bitcoin", priceUsd = 20.0),
-                    CurrencyPriceDto(id = "ethereum", priceUsd = 1200.1111)
-                )
-            )
-        )
-        val expectedValues = listOf(
-            listOf(
-                CurrencyPrice(id = "bitcoin", priceUsd = "24,00"),
-                CurrencyPrice(id = "ethereum", priceUsd = "1 200,09")
-            ),
-            listOf(CurrencyPrice(id = "bitcoin", priceUsd = "30,00"))
-        )
-        Assert.assertEquals(expectedValues, results)
+        Assert.assertEquals(expectedEmptyNewPrices, actualValue)
     }
 }

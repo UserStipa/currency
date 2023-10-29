@@ -3,16 +3,11 @@ package com.userstipa.currency.domain.usecases.get_my_currencies
 import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.api.GetCurrenciesDto
 import com.userstipa.currency.data.local.PreferencesKeys
-import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.MapperCurrencyPriceDetail
-import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.domain.repository.RepositoryFake
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
@@ -30,11 +25,10 @@ class GetMyCurrenciesTest {
         getMyCurrenciesImpl = GetMyCurrenciesImpl(repositoryFake, MapperCurrencyPriceDetail())
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun launch() = runTest {
-        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf("bitcoin"))
-        repositoryFake.result = Response.success(
+    fun `get my currencies - successful`() = runTest {
+        val myCurrenciesIds = setOf("bitcoin")
+        val remoteCurrencies = Response.success(
             GetCurrenciesDto(
                 data = listOf(
                     CurrencyDto(
@@ -55,56 +49,44 @@ class GetMyCurrenciesTest {
                 timestamp = "000000"
             )
         )
-        val values = mutableListOf<Resource<List<CurrencyPriceDetail>>>()
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            getMyCurrenciesImpl.launch().toList(values)
-        }
-
-        val expectedValueLoading = Resource.Loading<List<CurrencyPrice>>()
-        val expectedValueResult = Resource.Success(
-            data = listOf(
-                CurrencyPriceDetail(
-                    id = "bitcoin",
-                    name = "Bitcoin",
-                    symbol = "BTC",
-                    priceUsd = "34 312,79",
-                    isEnableCheckbox = false
-                )
+        val expectedValue = listOf(
+            CurrencyPriceDetail(
+                id = "bitcoin",
+                name = "Bitcoin",
+                symbol = "BTC",
+                priceUsd = "34 312,79",
+                isEnableCheckbox = false
             )
         )
 
-        Assert.assertEquals(expectedValueLoading.javaClass.name, values[0].javaClass.name)
-        Assert.assertEquals(expectedValueResult, values[1])
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
+        repositoryFake.getRemoteCurrenciesResult = remoteCurrencies
+        val actualValue = getMyCurrenciesImpl.launch().first()
 
-        val expectedValue = "bitcoin"
-        Assert.assertEquals(expectedValue, repositoryFake.ids)
+        Assert.assertEquals(expectedValue, actualValue)
     }
 
     @Test
-    fun `launch - validate arguments`() = runTest {
-        repositoryFake.setPreferences(
-            PreferencesKeys.MY_CURRENCIES,
-            setOf("vechain", "bitcoin", "ethereum")
-        )
-        getMyCurrenciesImpl.launch().collect()
-        val expectedValue = "vechain,bitcoin,ethereum"
-        Assert.assertEquals(expectedValue, repositoryFake.ids)
+    fun `get my currencies - error`() = runTest {
+        val myCurrenciesIds = setOf("bitcoin")
+        val expectedValue = Exception("Test error")
+
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
+        repositoryFake.getRemoteCurrenciesException = expectedValue
+
+        getMyCurrenciesImpl.launch().catch { actualException ->
+            Assert.assertEquals(expectedValue, actualException)
+        }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `launch - empty myCurrenciesIds`() = runTest {
-        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, setOf())
+        val myCurrenciesIds = emptySet<String>()
+        val expectedValue = emptyList<CurrencyPriceDetail>()
 
-        val values = mutableListOf<Resource<List<CurrencyPriceDetail>>>()
-        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-            getMyCurrenciesImpl.launch().toList(values)
-        }
+        repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
+        val actualValue = getMyCurrenciesImpl.launch().first()
 
-        val expectedValueLoading = Resource.Loading<List<CurrencyPriceDetail>>()
-        val expectedValueResult = Resource.Success(emptyList<CurrencyPriceDetail>())
-
-        Assert.assertEquals(expectedValueLoading.javaClass.name, values[0].javaClass.name)
-        Assert.assertEquals(expectedValueResult, values[1])
+        Assert.assertEquals(expectedValue, actualValue)
     }
 }

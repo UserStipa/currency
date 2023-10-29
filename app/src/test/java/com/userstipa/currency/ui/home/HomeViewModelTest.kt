@@ -1,11 +1,10 @@
 package com.userstipa.currency.ui.home
 
-import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
-import com.userstipa.currency.testUtil.DispatcherProviderFake
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrenciesFake
 import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPricesFake
+import com.userstipa.currency.testUtil.DispatcherProviderFake
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -23,207 +22,144 @@ class HomeViewModelTest {
         getMyCurrenciesFake = GetMyCurrenciesFake()
         newCurrenciesPricesFake = NewCurrenciesPricesFake()
         dispatcherProviderFake = DispatcherProviderFake()
-        viewModel =
-            HomeViewModel(getMyCurrenciesFake, newCurrenciesPricesFake, dispatcherProviderFake)
+        viewModel = HomeViewModel(getMyCurrenciesFake, newCurrenciesPricesFake, dispatcherProviderFake)
     }
 
     @Test
-    fun getUiState() {
+    fun `get my currencies - successful`() = runTest {
+        val myCurrencies = listOf(
+            CurrencyPriceDetail(
+                id = "bitcoin",
+                name = "Bitcoin",
+                symbol = "BTC",
+                priceUsd = "34 312,79",
+                isEnableCheckbox = true
+            ),
+            CurrencyPriceDetail(
+                id = "ethereum",
+                name = "Ethereum",
+                symbol = "ETH",
+                priceUsd = "12 000,00",
+                isEnableCheckbox = true
+            )
+        )
         val expectedValue = HomeUiState(
             isLoading = false,
             error = null,
-            list = emptyList()
+            list = myCurrencies
         )
+
+        getMyCurrenciesFake.launchResult = myCurrencies
+        viewModel.fetchData()
+
         assertEquals(expectedValue, viewModel.uiState.value)
     }
 
     @Test
-    fun `fetchData - successful`() = runTest {
-        val expectedValue = Resource.Success(
-            data = listOf(
-                CurrencyPriceDetail(
-                    id = "bitcoin",
-                    name = "Bitcoin",
-                    symbol = "BTC",
-                    priceUsd = "34 312,79",
-                    isEnableCheckbox = true
-                ),
-                CurrencyPriceDetail(
-                    id = "ethereum",
-                    name = "Ethereum",
-                    symbol = "ETH",
-                    priceUsd = "12 000,00",
-                    isEnableCheckbox = true
-                )
-            )
-        )
-
-        val expectedUiState = HomeUiState(
-            isLoading = false,
-            error = null,
-            list = expectedValue.data
-        )
-        viewModel.fetchData()
-        getMyCurrenciesFake.emit(expectedValue)
-        assertEquals(expectedUiState, viewModel.uiState.value)
-    }
-
-    @Test
-    fun `fetchData - error`() = runTest {
-        val expectedException = Resource.Error<List<CurrencyPriceDetail>>(Exception("Test error"))
-        val expectedUiState = HomeUiState(
+    fun `get my currencies - error`() = runTest {
+        val exception = Exception("Test error")
+        val expectedValue = HomeUiState(
             isLoading = false,
             error = "Test error",
             list = emptyList()
         )
+
+        getMyCurrenciesFake.launchException = exception
         viewModel.fetchData()
-        getMyCurrenciesFake.emit(expectedException)
-        assertEquals(expectedUiState, viewModel.uiState.value)
+
+        assertEquals(expectedValue, viewModel.uiState.value)
     }
 
     @Test
-    fun subscribeNewPrices() = runTest {
-        val initValues = Resource.Success(
-            data = listOf(
-                CurrencyPriceDetail(
-                    id = "bitcoin",
-                    name = "Bitcoin",
-                    symbol = "BTC",
-                    priceUsd = "34 312,79",
-                    isEnableCheckbox = true
-                ),
-                CurrencyPriceDetail(
-                    id = "ethereum",
-                    name = "Ethereum",
-                    symbol = "ETH",
-                    priceUsd = "12 000,00",
-                    isEnableCheckbox = true
-                )
+    fun `get new prices - successful`() = runTest {
+        val myCurrenciesCurrentPrice = listOf(
+            CurrencyPriceDetail(
+                id = "bitcoin",
+                name = "Bitcoin",
+                symbol = "BTC",
+                priceUsd = "10000",
+                isEnableCheckbox = true
+            ),
+            CurrencyPriceDetail(
+                id = "ethereum",
+                name = "Ethereum",
+                symbol = "ETH",
+                priceUsd = "54",
+                isEnableCheckbox = true
             )
         )
-
-        val expectedUiStateInit = HomeUiState(
-            isLoading = false,
-            error = null,
-            list = initValues.data
-        )
-
         val newPrices = listOf(
-            CurrencyPrice(id = "bitcoin", priceUsd = "24,00")
-        )
-
-        val expectedUiStateNewPrices = HomeUiState(
-            isLoading = false,
-            error = null,
-            list = listOf(
-                CurrencyPriceDetail(
-                    id = "bitcoin",
-                    name = "Bitcoin",
-                    symbol = "BTC",
-                    priceUsd = "24,00",
-                    isEnableCheckbox = true
-                ),
-                CurrencyPriceDetail(
-                    id = "ethereum",
-                    name = "Ethereum",
-                    symbol = "ETH",
-                    priceUsd = "12 000,00",
-                    isEnableCheckbox = true
-                )
+            CurrencyPrice(
+                id = "bitcoin",
+                priceUsd = "24,00"
+            ),
+            CurrencyPrice(
+                id = "ethereum",
+                priceUsd = "12 000,00"
             )
         )
+        val myCurrenciesNewPrice = listOf(
+            CurrencyPriceDetail(
+                id = "bitcoin",
+                name = "Bitcoin",
+                symbol = "BTC",
+                priceUsd = "24,00",
+                isEnableCheckbox = true
+            ),
+            CurrencyPriceDetail(
+                id = "ethereum",
+                name = "Ethereum",
+                symbol = "ETH",
+                priceUsd = "12 000,00",
+                isEnableCheckbox = true
+            )
+        )
+        val expectedValue = HomeUiState(
+            isLoading = false,
+            error = null,
+            list = myCurrenciesNewPrice
+        )
 
+        getMyCurrenciesFake.launchResult = myCurrenciesCurrentPrice
         viewModel.fetchData()
-        getMyCurrenciesFake.emit(initValues)
-
-        val actualUiStateInit = viewModel.uiState.value
-        assertEquals("Init currencies", expectedUiStateInit, actualUiStateInit)
-
+        newCurrenciesPricesFake.subscribeResult = newPrices
         viewModel.subscribeNewPrices()
-        newCurrenciesPricesFake.webSocketFlow.emit(newPrices)
 
-        val actualUiStateNewPrices = viewModel.uiState.value
-        assertEquals("New currencies", expectedUiStateNewPrices, actualUiStateNewPrices)
 
+        assertEquals("New currencies", expectedValue, viewModel.uiState.value)
     }
 
     @Test
-    fun unsubscribeNewPrices() = runTest {
-        val initValues = Resource.Success(
-            data = listOf(
-                CurrencyPriceDetail(
-                    id = "bitcoin",
-                    name = "Bitcoin",
-                    symbol = "BTC",
-                    priceUsd = "34 312,79",
-                    isEnableCheckbox = true
-                ),
-                CurrencyPriceDetail(
-                    id = "ethereum",
-                    name = "Ethereum",
-                    symbol = "ETH",
-                    priceUsd = "12 000,00",
-                    isEnableCheckbox = true
-                )
+    fun `get new prices - error`() = runTest {
+        val myCurrenciesCurrentPrice = listOf(
+            CurrencyPriceDetail(
+                id = "bitcoin",
+                name = "Bitcoin",
+                symbol = "BTC",
+                priceUsd = "10000",
+                isEnableCheckbox = true
+            ),
+            CurrencyPriceDetail(
+                id = "ethereum",
+                name = "Ethereum",
+                symbol = "ETH",
+                priceUsd = "54",
+                isEnableCheckbox = true
             )
         )
-
-        val expectedUiStateInit = HomeUiState(
+        val exception = Exception("Test error")
+        val expectedValue = HomeUiState(
             isLoading = false,
-            error = null,
-            list = initValues.data
+            error = exception.message,
+            list = myCurrenciesCurrentPrice
         )
 
-        val newPricesFirst = listOf(
-            CurrencyPrice(id = "bitcoin", priceUsd = "24,00")
-        )
-
-        val expectedUiStateNewPrices = HomeUiState(
-            isLoading = false,
-            error = null,
-            list = listOf(
-                CurrencyPriceDetail(
-                    id = "bitcoin",
-                    name = "Bitcoin",
-                    symbol = "BTC",
-                    priceUsd = "24,00",
-                    isEnableCheckbox = true
-                ),
-                CurrencyPriceDetail(
-                    id = "ethereum",
-                    name = "Ethereum",
-                    symbol = "ETH",
-                    priceUsd = "12 000,00",
-                    isEnableCheckbox = true
-                )
-            )
-        )
-
-        val newPricesSecond = listOf(
-            CurrencyPrice(id = "bitcoin", priceUsd = "10000,00")
-        )
-
-
+        getMyCurrenciesFake.launchResult = myCurrenciesCurrentPrice
         viewModel.fetchData()
-        getMyCurrenciesFake.emit(initValues)
-
-        val actualUiStateInit = viewModel.uiState.value
-        assertEquals("WebSocket close - init values", expectedUiStateInit, actualUiStateInit)
-
+        newCurrenciesPricesFake.subscribeError = exception
         viewModel.subscribeNewPrices()
-        newCurrenciesPricesFake.webSocketFlow.emit(newPricesFirst)
 
-        val actualUiStateNewPrices = viewModel.uiState.value
-        assertEquals(
-            "WebSocket open - new values",
-            expectedUiStateNewPrices,
-            actualUiStateNewPrices
-        )
 
-        viewModel.unsubscribeNewPrices()
-        newCurrenciesPricesFake.webSocketFlow.emit(newPricesSecond)
-
-        val actualUiState = viewModel.uiState.value
-        assertEquals("WebSocket close - previous values", expectedUiStateNewPrices, actualUiState)
+        assertEquals("New currencies", expectedValue, viewModel.uiState.value)
     }
 }
