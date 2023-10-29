@@ -3,7 +3,6 @@ package com.userstipa.currency.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
-import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
@@ -14,6 +13,9 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,45 +32,28 @@ class HomeViewModel @Inject constructor(
 
     fun fetchData() {
         viewModelScope.launch(dispatcher.io) {
-            getMyCurrencies.launch().collect { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                error = result.exception.message
-                            )
-                        }
-                    }
-
-                    is Resource.Loading -> {
-                        _uiState.update { it.copy(isLoading = true) }
-                    }
-
-                    is Resource.Success -> {
-                        _uiState.update { it.copy(isLoading = false, list = result.data) }
-                    }
+            getMyCurrencies.launch()
+                .onStart {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
-            }
+                .catch { error ->
+                    _uiState.update { it.copy(error = error.message, isLoading = false) }
+                }
+                .collectLatest { result ->
+                    _uiState.update { it.copy(list = result, isLoading = false) }
+                }
         }
     }
 
     fun subscribeNewPrices() {
         webSocketScope.launch(dispatcher.io) {
-            newCurrenciesPrices.subscribe().collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        _uiState.update { it.copy(list = updateListByNewPrices(result.data)) }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update { it.copy(error = result.exception.message) }
-                        unsubscribeNewPrices()
-                    }
-
-                    else -> {}
+            newCurrenciesPrices.subscribe()
+                .catch { error ->
+                    _uiState.update { it.copy(error = error.message) }
                 }
-            }
+                .collect { result ->
+                    _uiState.update { it.copy(list = updateListByNewPrices(result)) }
+                }
         }
     }
 

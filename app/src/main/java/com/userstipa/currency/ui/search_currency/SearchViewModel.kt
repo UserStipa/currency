@@ -3,7 +3,6 @@ package com.userstipa.currency.ui.search_currency
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
-import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
@@ -11,6 +10,9 @@ import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,21 +29,16 @@ class SearchViewModel @Inject constructor(
 
     fun fetchData() {
         viewModelScope.launch(dispatcher.io) {
-            getAllCurrencies.launch().collect { result ->
-                when (result) {
-                    is Resource.Error -> {
-                        _uiState.update { it.copy(isLoading = false, error = result.exception.message) }
-                    }
-
-                    is Resource.Loading -> {
-                        _uiState.update { it.copy(isLoading = true) }
-                    }
-
-                    is Resource.Success -> {
-                        _uiState.update { it.copy(isLoading = false, list = result.data) }
-                    }
+            getAllCurrencies.launch()
+                .onStart {
+                    _uiState.update { it.copy(isLoading = true) }
                 }
-            }
+                .catch { error ->
+                    _uiState.update { it.copy(isLoading = false, error = error.message) }
+                }
+                .collectLatest { result ->
+                    _uiState.update { it.copy(isLoading = false, list = result) }
+                }
         }
     }
 
