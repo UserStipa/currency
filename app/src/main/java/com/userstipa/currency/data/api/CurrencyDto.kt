@@ -1,7 +1,7 @@
 package com.userstipa.currency.data.api
 
 data class CurrencyDto(
-    val changePercent24Hr: String,
+    val changePercent24Hr: Double,
     val explorer: String,
     val id: String,
     val marketCapUsd: String,

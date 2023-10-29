@@ -49,15 +49,15 @@ class SearchAdapter(
             name.text = currency.name
             symbol.text = currency.symbol
             checkbox.isChecked = currency.isEnableCheckbox
+
             checkbox.setOnClickListener {
                 if (checkbox.isChecked) {
+                    list[holder.adapterPosition].isEnableCheckbox = true
                     listener.onClickAddCurrency(currency)
-                    currency.isEnableCheckbox = true
                 } else {
+                    list[holder.adapterPosition].isEnableCheckbox = false
                     listener.onClickRemoveCurrency(currency)
-                    currency.isEnableCheckbox = false
                 }
-                notifyItemChanged(holder.adapterPosition)
             }
         }
     }
