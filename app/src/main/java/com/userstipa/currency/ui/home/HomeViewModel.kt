@@ -14,6 +14,7 @@ import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -55,20 +56,13 @@ class HomeViewModel @Inject constructor(
 
     fun subscribeNewPrices() {
         webSocketScope.launch(dispatcher.io) {
-            newCurrenciesPrices.subscribe().collect { result ->
-                when (result) {
-                    is Resource.Success -> {
-                        _uiState.update { it.copy(list = updateListByNewPrices(result.data)) }
-                    }
-
-                    is Resource.Error -> {
-                        _uiState.update { it.copy(error = result.exception.message) }
-                        unsubscribeNewPrices()
-                    }
-
-                    else -> {}
+            newCurrenciesPrices.subscribe()
+                .catch { error ->
+                    _uiState.update { it.copy(error = error.message) }
                 }
-            }
+                .collect { result ->
+                    _uiState.update { it.copy(list = updateListByNewPrices(result)) }
+                }
         }
     }
 
