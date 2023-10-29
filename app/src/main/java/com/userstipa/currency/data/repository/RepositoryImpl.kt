@@ -6,7 +6,6 @@ import com.userstipa.currency.data.local.Preferences
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.websocket.CryptocurrencyWebSocket
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 import javax.inject.Inject
@@ -33,11 +32,8 @@ class RepositoryImpl @Inject constructor(
         return preferences.getPreferences(key)
     }
 
-    override fun openWebSocket(scope: CoroutineScope, ids: String): Flow<CurrencyPriceWrapperDto> {
-        return websocket.open(scope, ids)
+    override fun openWebSocket(ids: String): Flow<CurrencyPriceWrapperDto> {
+        return websocket.open(ids)
     }
 
-    override fun closeWebSocket() {
-        websocket.close()
-    }
 }

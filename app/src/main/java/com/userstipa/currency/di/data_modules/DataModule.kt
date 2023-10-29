@@ -12,7 +12,6 @@ import com.userstipa.currency.data.websocket.CryptocurrencyWebSocket
 import com.userstipa.currency.data.websocket.CryptocurrencyWebSocketImpl
 import com.userstipa.currency.data.websocket.CurrencyPriceAdapter
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
-import com.userstipa.currency.di.dispatchers.DispatcherProvider
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -43,10 +42,9 @@ class DataModule {
     @Provides
     fun provideCryptocurrencyWebSocket(
         gson: Gson,
-        okHttpClient: OkHttpClient,
-        dispatcherProvides: DispatcherProvider
+        okHttpClient: OkHttpClient
     ): CryptocurrencyWebSocket {
-        return CryptocurrencyWebSocketImpl(okHttpClient, gson, dispatcherProvides)
+        return CryptocurrencyWebSocketImpl(okHttpClient, gson)
     }
 
     @Provides
