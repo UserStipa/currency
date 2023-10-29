@@ -6,7 +6,6 @@ import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.domain.Resource
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.CurrencyPrice
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -18,7 +17,7 @@ class NewCurrenciesPricesImpl @Inject constructor(
     private val mapper: Mapper<CurrencyPriceDto, CurrencyPrice>
 ) : NewCurrenciesPrices {
 
-    override suspend fun subscribe(scope: CoroutineScope): Flow<Resource<List<CurrencyPrice>>> =
+    override suspend fun subscribe(): Flow<Resource<List<CurrencyPrice>>> =
         flow {
             try {
                 val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
@@ -26,21 +25,13 @@ class NewCurrenciesPricesImpl @Inject constructor(
                     emit(Resource.Success(emptyList()))
                 } else {
                     val query = myCurrenciesIds.joinToString(",")
-                    val networkResult = repository.openWebSocket(scope, query)
-                        .map { networkResult ->
-                            mapper.map(networkResult.data)
-                        }
-                        .map { data ->
-                            Resource.Success(data)
-                        }
+                    val networkResult = repository.openWebSocket(query)
+                        .map { networkResult -> mapper.map(networkResult.data) }
+                        .map { newPrices -> Resource.Success(newPrices) }
                     emitAll(networkResult)
                 }
             } catch (e: Throwable) {
                 emit(Resource.Error(e))
             }
         }
-
-    override fun unsubscribe() {
-        repository.closeWebSocket()
-    }
 }
