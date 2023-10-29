@@ -30,7 +30,7 @@ class GetAllCurrenciesTest {
             GetCurrenciesDto(
                 data = listOf(
                     CurrencyDto(
-                        changePercent24Hr = "-1.1119214668658208",
+                        changePercent24Hr = 1.1119214668658208,
                         explorer = "https://blockchain.info/",
                         id = "bitcoin",
                         marketCapUsd = "669720933191.1164966118771744",
@@ -44,7 +44,7 @@ class GetAllCurrenciesTest {
                         vwap24Hr = "34043.8912981619835247"
                     ),
                     CurrencyDto(
-                        changePercent24Hr = "-3.3659161263923668",
+                        changePercent24Hr = 3.3659161263923668,
                         explorer = "https://etherscan.io/",
                         id = "ethereum",
                         marketCapUsd = "214877322599.5196305515861831",

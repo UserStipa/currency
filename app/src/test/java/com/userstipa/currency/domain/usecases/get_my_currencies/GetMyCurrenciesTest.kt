@@ -32,7 +32,7 @@ class GetMyCurrenciesTest {
             GetCurrenciesDto(
                 data = listOf(
                     CurrencyDto(
-                        changePercent24Hr = "-1.1119214668658208",
+                        changePercent24Hr = 1.1119214668658208,
                         explorer = "https://blockchain.info/",
                         id = "bitcoin",
                         marketCapUsd = "669720933191.1164966118771744",
@@ -55,6 +55,7 @@ class GetMyCurrenciesTest {
                 name = "Bitcoin",
                 symbol = "BTC",
                 priceUsd = "34 312,79",
+                changePercent24Hr = "1.12",
                 isEnableCheckbox = false
             )
         )

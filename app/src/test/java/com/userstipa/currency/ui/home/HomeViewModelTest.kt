@@ -33,6 +33,7 @@ class HomeViewModelTest {
                 name = "Bitcoin",
                 symbol = "BTC",
                 priceUsd = "34 312,79",
+                changePercent24Hr = "1.29",
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -40,6 +41,7 @@ class HomeViewModelTest {
                 name = "Ethereum",
                 symbol = "ETH",
                 priceUsd = "12 000,00",
+                changePercent24Hr = "1.43",
                 isEnableCheckbox = true
             )
         )
@@ -78,6 +80,7 @@ class HomeViewModelTest {
                 name = "Bitcoin",
                 symbol = "BTC",
                 priceUsd = "10000",
+                changePercent24Hr = "1.29",
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -85,6 +88,7 @@ class HomeViewModelTest {
                 name = "Ethereum",
                 symbol = "ETH",
                 priceUsd = "54",
+                changePercent24Hr = "1.43",
                 isEnableCheckbox = true
             )
         )
@@ -104,6 +108,7 @@ class HomeViewModelTest {
                 name = "Bitcoin",
                 symbol = "BTC",
                 priceUsd = "24,00",
+                changePercent24Hr = "1.29",
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -111,6 +116,7 @@ class HomeViewModelTest {
                 name = "Ethereum",
                 symbol = "ETH",
                 priceUsd = "12 000,00",
+                changePercent24Hr = "1.43",
                 isEnableCheckbox = true
             )
         )
@@ -137,6 +143,7 @@ class HomeViewModelTest {
                 name = "Bitcoin",
                 symbol = "BTC",
                 priceUsd = "10000",
+                changePercent24Hr = "1.29",
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -144,6 +151,7 @@ class HomeViewModelTest {
                 name = "Ethereum",
                 symbol = "ETH",
                 priceUsd = "54",
+                changePercent24Hr = "1.43",
                 isEnableCheckbox = true
             )
         )
