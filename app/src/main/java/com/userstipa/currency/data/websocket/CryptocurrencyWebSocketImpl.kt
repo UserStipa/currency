@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import javax.inject.Inject
@@ -32,6 +33,17 @@ class CryptocurrencyWebSocketImpl @Inject constructor(
             override fun onMessage(webSocket: WebSocket, text: String) {
                 val result = gson.fromJson(text, CurrencyPriceWrapperDto::class.java)
                 flow.trySend(result)
+            }
+
+            override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+                super.onFailure(webSocket, t, response)
+                flow.close(t)
+                throw t
+            }
+
+            override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
+                super.onClosed(webSocket, code, reason)
+                flow.close()
             }
         }
     }

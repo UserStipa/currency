@@ -1,17 +1,23 @@
 package com.userstipa.currency.ui.home
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.userstipa.currency.R
 import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
-class HomeAdapter : RecyclerView.Adapter<HomeAdapter.Holder>() {
+class HomeAdapter(
+    context: Context
+) : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
+    private val colorPositiveNumber = context.getColor(R.color.positiveNumbersColor)
+    private val colorNegativeNumber = context.getColor(R.color.negativeNumbersColor)
 
     var list: List<CurrencyPriceDetail>
         get() = diffUtil.currentList
@@ -38,22 +44,34 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currency = list[position]
+        val changePercent24HrColor = if (currency.isPositiveChangePercent24Hr) {
+            colorPositiveNumber
+        } else {
+            colorNegativeNumber
+        }
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
             price.text = currency.priceUsd
             changePercent24Hr.text = currency.changePercent24Hr
+            changePercent24Hr.setTextColor(changePercent24HrColor)
         }
     }
 
     inner class Holder(val binding: HomeItemListBinding) : RecyclerView.ViewHolder(binding.root)
 
     inner class DiffUtilCallback : DiffUtil.ItemCallback<CurrencyPriceDetail>() {
-        override fun areItemsTheSame(oldItem: CurrencyPriceDetail, newItem: CurrencyPriceDetail): Boolean {
+        override fun areItemsTheSame(
+            oldItem: CurrencyPriceDetail,
+            newItem: CurrencyPriceDetail
+        ): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: CurrencyPriceDetail, newItem: CurrencyPriceDetail): Boolean {
+        override fun areContentsTheSame(
+            oldItem: CurrencyPriceDetail,
+            newItem: CurrencyPriceDetail
+        ): Boolean {
             return oldItem == newItem
         }
 

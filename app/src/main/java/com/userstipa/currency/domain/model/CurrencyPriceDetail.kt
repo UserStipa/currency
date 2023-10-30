@@ -6,5 +6,6 @@ data class CurrencyPriceDetail(
     val symbol: String,
     val priceUsd: String,
     val changePercent24Hr: String,
+    val isPositiveChangePercent24Hr: Boolean,
     var isEnableCheckbox: Boolean
 )

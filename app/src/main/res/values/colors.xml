@@ -59,4 +59,8 @@
     <color name="md_theme_dark_surfaceTint">#D0BCFF</color>
     <color name="md_theme_dark_outlineVariant">#49454F</color>
     <color name="md_theme_dark_scrim">#000000</color>
+
+    <!-- Other colors -->
+    <color name="positiveNumbersColor">#359804</color>
+    <color name="negativeNumbersColor">#AE0404</color>
 </resources>
