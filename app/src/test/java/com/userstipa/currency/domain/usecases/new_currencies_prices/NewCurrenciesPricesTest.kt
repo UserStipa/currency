@@ -34,8 +34,8 @@ class NewCurrenciesPricesTest {
             )
         )
         val expectedNewPrices = listOf(
-            CurrencyPrice(id = "bitcoin", priceUsd = "24,00"),
-            CurrencyPrice(id = "ethereum", priceUsd = "1 200,09"),
+            CurrencyPrice(id = "bitcoin", priceUsd = "24,00 $"),
+            CurrencyPrice(id = "ethereum", priceUsd = "1 200,09 $"),
         )
 
         repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)

@@ -34,6 +34,7 @@ class HomeViewModelTest {
                 symbol = "BTC",
                 priceUsd = "34 312,79",
                 changePercent24Hr = "1.29",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -42,6 +43,7 @@ class HomeViewModelTest {
                 symbol = "ETH",
                 priceUsd = "12 000,00",
                 changePercent24Hr = "1.43",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             )
         )
@@ -81,6 +83,7 @@ class HomeViewModelTest {
                 symbol = "BTC",
                 priceUsd = "10000",
                 changePercent24Hr = "1.29",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -89,6 +92,7 @@ class HomeViewModelTest {
                 symbol = "ETH",
                 priceUsd = "54",
                 changePercent24Hr = "1.43",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             )
         )
@@ -109,6 +113,7 @@ class HomeViewModelTest {
                 symbol = "BTC",
                 priceUsd = "24,00",
                 changePercent24Hr = "1.29",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -117,6 +122,7 @@ class HomeViewModelTest {
                 symbol = "ETH",
                 priceUsd = "12 000,00",
                 changePercent24Hr = "1.43",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             )
         )
@@ -144,6 +150,7 @@ class HomeViewModelTest {
                 symbol = "BTC",
                 priceUsd = "10000",
                 changePercent24Hr = "1.29",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
             CurrencyPriceDetail(
@@ -152,6 +159,7 @@ class HomeViewModelTest {
                 symbol = "ETH",
                 priceUsd = "54",
                 changePercent24Hr = "1.43",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             )
         )

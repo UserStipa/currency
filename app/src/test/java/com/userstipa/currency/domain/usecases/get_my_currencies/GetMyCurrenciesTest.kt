@@ -54,8 +54,9 @@ class GetMyCurrenciesTest {
                 id = "bitcoin",
                 name = "Bitcoin",
                 symbol = "BTC",
-                priceUsd = "34 312,79",
+                priceUsd = "34 312,79 $",
                 changePercent24Hr = "1.12",
+                isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = false
             )
         )
