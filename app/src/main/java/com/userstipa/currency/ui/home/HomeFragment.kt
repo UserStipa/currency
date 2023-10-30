@@ -26,7 +26,8 @@ class HomeFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: HomeViewModelFactory
     private val viewModel by viewModels<HomeViewModel> { viewModelFactory }
-    private val adapter = HomeAdapter()
+    private var _adapter: HomeAdapter? = null
+    private val adapter get() = _adapter!!
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
@@ -52,6 +53,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapter() {
+        _adapter = HomeAdapter(requireContext())
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
     }
