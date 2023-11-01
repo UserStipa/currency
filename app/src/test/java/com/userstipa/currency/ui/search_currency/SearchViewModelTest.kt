@@ -9,6 +9,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
+import java.io.IOException
 
 class SearchViewModelTest {
 
@@ -39,6 +40,17 @@ class SearchViewModelTest {
         val expectedValue = SearchUiState(list = allCurrencies)
 
         getRemoteCurrencies.launchResult = allCurrencies
+        viewModel.fetchData()
+
+        Assert.assertEquals(expectedValue, viewModel.uiState.value)
+    }
+
+    @Test
+    fun `get all currencies - lost connection`() = runTest {
+        val exception = IOException()
+        val expectedValue = SearchUiState(error = "Lost internet connection")
+
+        getRemoteCurrencies.launchException = exception
         viewModel.fetchData()
 
         Assert.assertEquals(expectedValue, viewModel.uiState.value)
