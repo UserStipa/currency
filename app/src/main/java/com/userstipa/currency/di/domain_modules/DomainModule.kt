@@ -17,6 +17,8 @@ import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrencie
 import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPricesImpl
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrencyImpl
+import com.userstipa.currency.domain.usecases.subscribe_my_currencies.SubscribeMyCurrencies
+import com.userstipa.currency.domain.usecases.subscribe_my_currencies.SubscribeMyCurrenciesImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -61,5 +63,14 @@ class DomainModule {
         mapper: Mapper<CurrencyPriceDto, CurrencyPrice>
     ): NewCurrenciesPrices {
         return NewCurrenciesPricesImpl(repository, mapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSubscribeMyCurrencies(
+        getMyCurrencies: GetMyCurrencies,
+        newCurrenciesPrices: NewCurrenciesPrices
+    ): SubscribeMyCurrencies {
+        return SubscribeMyCurrenciesImpl(getMyCurrencies, newCurrenciesPrices)
     }
 }

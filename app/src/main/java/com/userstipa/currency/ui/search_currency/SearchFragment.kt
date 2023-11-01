@@ -12,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.userstipa.currency.App
 import com.userstipa.currency.databinding.FragmentSearchBinding
 import com.userstipa.currency.domain.model.Currency
@@ -62,7 +61,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
                 viewModel.uiState.collectLatest { uiState ->
                     adapter.list = uiState.list
                     binding.progressBar.isVisible = uiState.isLoading
-                    uiState.error?.let { showMessage(it) }
+                    binding.message.text = uiState.error
                 }
             }
         }
@@ -74,10 +73,6 @@ class SearchFragment : Fragment(), SearchAdapterListener {
 
     override fun onClickRemoveCurrency(currency: Currency) {
         viewModel.removeCurrency(currency)
-    }
-
-    private fun showMessage(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

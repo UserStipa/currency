@@ -38,7 +38,6 @@ class CryptocurrencyWebSocketImpl @Inject constructor(
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                 super.onFailure(webSocket, t, response)
                 flow.close(t)
-                throw t
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {

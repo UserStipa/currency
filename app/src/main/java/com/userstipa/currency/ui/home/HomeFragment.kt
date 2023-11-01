@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.snackbar.Snackbar
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentHomeBinding
@@ -41,7 +40,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        viewModel.fetchData()
         return binding.root
     }
 
@@ -62,6 +60,9 @@ class HomeFragment : Fragment() {
         binding.btnAdd.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
+        binding.update.setOnClickListener {
+            viewModel.subscribeData()
+        }
     }
 
     private fun setObservers() {
@@ -70,24 +71,25 @@ class HomeFragment : Fragment() {
                 viewModel.uiState.collectLatest { uiState ->
                     adapter.list = uiState.list
                     binding.progressBar.isVisible = uiState.isLoading
-                    uiState.error?.let { showMessage(it) }
+                    showMessage(uiState.error)
                 }
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.subscribeNewPrices()
+    private fun showMessage(text: String?) {
+        binding.messageLayout.isVisible = (text != null)
+        binding.message.text = text
     }
 
-    override fun onPause() {
-        super.onPause()
-        viewModel.unsubscribeNewPrices()
+    override fun onStart() {
+        super.onStart()
+        viewModel.subscribeData()
     }
 
-    private fun showMessage(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
+    override fun onStop() {
+        super.onStop()
+        viewModel.unsubscribeData()
     }
 
     override fun onDestroyView() {

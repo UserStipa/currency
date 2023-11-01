@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(
@@ -34,7 +35,21 @@ class SearchViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = true) }
                 }
                 .catch { error ->
-                    _uiState.update { it.copy(isLoading = false, error = error.message) }
+                    when (error) {
+                        is IOException -> _uiState.update {
+                            SearchUiState(
+                                isLoading = false,
+                                error = "Lost internet connection"
+                            )
+                        }
+
+                        else -> {
+                            SearchUiState(
+                                isLoading = false,
+                                error = error.message
+                            )
+                        }
+                    }
                 }
                 .collectLatest { result ->
                     _uiState.update { it.copy(isLoading = false, list = result) }

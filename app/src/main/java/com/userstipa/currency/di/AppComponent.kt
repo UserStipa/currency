@@ -9,22 +9,23 @@ import com.userstipa.currency.di.domain_modules.MapperModule
 import com.userstipa.currency.di.ui_modules.ViewModelFactoryModule
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
-import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
-import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
 import com.userstipa.currency.domain.usecases.remove_currency.RemoveCurrency
+import com.userstipa.currency.domain.usecases.subscribe_my_currencies.SubscribeMyCurrencies
 import com.userstipa.currency.ui.home.HomeFragment
 import com.userstipa.currency.ui.search_currency.SearchFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
-@Component(modules = [
-    DataModule::class,
-    ViewModelFactoryModule::class,
-    DomainModule::class,
-    DispatcherModule::class,
-    MapperModule::class
-])
+@Component(
+    modules = [
+        DataModule::class,
+        ViewModelFactoryModule::class,
+        DomainModule::class,
+        DispatcherModule::class,
+        MapperModule::class
+    ]
+)
 @Singleton
 interface AppComponent {
 
@@ -35,13 +36,11 @@ interface AppComponent {
 
     fun useCaseGetAllCurrencies(): GetAllCurrencies
 
-    fun useCaseGetMyCurrencies(): GetMyCurrencies
-
     fun useCaseAddCurrency(): AddCurrency
 
     fun useCaseRemoveCurrency(): RemoveCurrency
 
-    fun useCaseGetNewCurrencies(): NewCurrenciesPrices
+    fun useCaseSubscribeMyCurrencies(): SubscribeMyCurrencies
 
     fun getDispatcherProvider(): DispatcherProvider
 
