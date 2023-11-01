@@ -57,7 +57,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `subscribe to my currencies - lost connection`() = runTest {
+    fun `subscribe to my currencies - lost connection`() {
         val expectedValue = HomeUiState(
             isLoading = false,
             error = "Lost internet connection",
@@ -71,7 +71,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun `subscribe to my currencies - exception`() = runTest {
+    fun `subscribe to my currencies - exception`() {
         val expectedValue = HomeUiState(
             isLoading = false,
             error = "Test error",

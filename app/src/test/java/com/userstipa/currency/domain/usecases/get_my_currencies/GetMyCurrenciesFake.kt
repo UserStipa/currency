@@ -2,15 +2,19 @@ package com.userstipa.currency.domain.usecases.get_my_currencies
 
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class GetMyCurrenciesFake : GetMyCurrencies {
 
-    var launchResult: List<CurrencyPriceDetail>? = null
-    var launchException: Throwable? = null
+    private val flow = MutableSharedFlow<List<CurrencyPriceDetail>>()
+    var subscribeError: Throwable? = null
 
-    override suspend fun launch(): Flow<List<CurrencyPriceDetail>> = flow {
-        launchException?.let { throw it }
-        emit(launchResult!!)
+    suspend fun emit(value: List<CurrencyPriceDetail>) {
+        flow.emit(value)
+    }
+
+    override suspend fun launch(): Flow<List<CurrencyPriceDetail>> {
+        subscribeError?.let { throw it }
+        return flow
     }
 }
