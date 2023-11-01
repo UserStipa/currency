@@ -94,6 +94,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _adapter = null
         _binding = null
     }
 }

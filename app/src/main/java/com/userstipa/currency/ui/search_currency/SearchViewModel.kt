@@ -32,7 +32,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch(dispatcher.io) {
             getAllCurrencies.launch()
                 .onStart {
-                    _uiState.update { it.copy(isLoading = true) }
+                    _uiState.update { it.copy(isLoading = true, error = null) }
                 }
                 .catch { error ->
                     when (error) {
@@ -51,7 +51,7 @@ class SearchViewModel @Inject constructor(
                     }
                 }
                 .collectLatest { result ->
-                    _uiState.update { it.copy(isLoading = false, list = result) }
+                    _uiState.update { SearchUiState(isLoading = false, list = result) }
                 }
         }
     }
