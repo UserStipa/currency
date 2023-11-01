@@ -42,8 +42,7 @@ class SearchViewModel @Inject constructor(
                                 error = "Lost internet connection"
                             )
                         }
-
-                        else -> {
+                        else -> _uiState.update {
                             SearchUiState(
                                 isLoading = false,
                                 error = error.message
