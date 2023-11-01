@@ -2,5 +2,9 @@
     <string name="app_name">currency</string>
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
+
+    <!-- Home -->
     <string name="fab_content_description">Add new currency</string>
+    <string name="update">Update</string>
+
 </resources>

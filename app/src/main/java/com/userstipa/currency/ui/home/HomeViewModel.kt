@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
@@ -33,7 +34,20 @@ class HomeViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = true, error = null) }
                 }
                 .catch { error ->
-                    _uiState.update { HomeUiState(isLoading = false, error = error.message) }
+                    when (error) {
+                        is IOException -> _uiState.update {
+                            HomeUiState(
+                                isLoading = false,
+                                error = "Lost internet connection"
+                            )
+                        }
+                        else -> _uiState.update {
+                            HomeUiState(
+                                isLoading = false,
+                                error = error.message
+                            )
+                        }
+                    }
                 }
                 .collectLatest { result ->
                     _uiState.update { HomeUiState(isLoading = false, list = result) }
