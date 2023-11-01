@@ -1,14 +1,11 @@
 package com.userstipa.currency.ui.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers.DispatcherProvider
-import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
-import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
-import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
+import com.userstipa.currency.domain.usecases.subscribe_my_currencies.SubscribeMyCurrencies
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
-    private val getMyCurrencies: GetMyCurrencies,
-    private val newCurrenciesPrices: NewCurrenciesPrices,
+    private val subscribeMyCurrencies: SubscribeMyCurrencies,
     private val dispatcher: DispatcherProvider
 ) : ViewModel() {
 
@@ -30,48 +26,27 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    fun fetchData() {
-        viewModelScope.launch(dispatcher.io) {
-            getMyCurrencies.launch()
+    fun subscribeData() {
+        webSocketScope.launch(dispatcher.io) {
+            subscribeMyCurrencies.launch()
                 .onStart {
-                    _uiState.update { it.copy(isLoading = true) }
+                    _uiState.update { it.copy(isLoading = true, error = null) }
                 }
                 .catch { error ->
-                    _uiState.update { it.copy(error = error.message, isLoading = false) }
+                    _uiState.update { HomeUiState(isLoading = false, error = error.message) }
                 }
                 .collectLatest { result ->
-                    _uiState.update { it.copy(list = result, isLoading = false) }
+                    _uiState.update { HomeUiState(isLoading = false, list = result) }
                 }
         }
     }
 
-    fun subscribeNewPrices() {
-        webSocketScope.launch(dispatcher.io) {
-            newCurrenciesPrices.subscribe()
-                .catch { error ->
-                    _uiState.update { it.copy(error = error.message) }
-                }
-                .collect { result ->
-                    _uiState.update { it.copy(list = updateListByNewPrices(result)) }
-                }
-        }
-    }
-
-    fun unsubscribeNewPrices() {
+    fun unsubscribeData() {
         webSocketScope.coroutineContext.cancelChildren()
     }
 
-    private fun updateListByNewPrices(newPrices: List<CurrencyPrice>): List<CurrencyPriceDetail> {
-        val currentCurrencies = uiState.value.list
-        val updatedCurrencies = mutableListOf<CurrencyPriceDetail>()
-        for (currency in currentCurrencies) {
-            val newPrice = newPrices.find { it.id == currency.id }
-            if (newPrice == null) {
-                updatedCurrencies.add(currency)
-            } else {
-                updatedCurrencies.add(currency.copy(priceUsd = newPrice.priceUsd))
-            }
-        }
-        return updatedCurrencies
+    override fun onCleared() {
+        super.onCleared()
+        webSocketScope.cancel()
     }
 }
