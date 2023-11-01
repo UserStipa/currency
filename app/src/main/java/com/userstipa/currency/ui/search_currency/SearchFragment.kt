@@ -45,14 +45,25 @@ class SearchFragment : Fragment(), SearchAdapterListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchData()
         setAdapter()
+        setUi()
         setObservers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.fetchData()
     }
 
     private fun setAdapter() {
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
+    }
+
+    private fun setUi() {
+        binding.update.setOnClickListener {
+            viewModel.fetchData()
+        }
     }
 
     private fun setObservers() {
@@ -61,10 +72,15 @@ class SearchFragment : Fragment(), SearchAdapterListener {
                 viewModel.uiState.collectLatest { uiState ->
                     adapter.list = uiState.list
                     binding.progressBar.isVisible = uiState.isLoading
-                    binding.message.text = uiState.error
+                    showMessage(uiState.error)
                 }
             }
         }
+    }
+
+    private fun showMessage(text: String?) {
+        binding.messageLayout.isVisible = (text != null)
+        binding.message.text = text
     }
 
     override fun onClickAddCurrency(currency: Currency) {
