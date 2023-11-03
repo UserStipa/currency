@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), HomeAdapterListener {
 
     @Inject
     lateinit var viewModelFactory: HomeViewModelFactory
@@ -51,14 +51,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        _adapter = HomeAdapter(requireContext())
+        _adapter = HomeAdapter(requireContext(), this)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
     }
 
     private fun setUi() {
         binding.btnAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            findNavController().navigate(R.id.action_Home_to_Search)
         }
         binding.update.setOnClickListener {
             viewModel.subscribeData()
@@ -75,6 +75,10 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onClickCurrency(view: View, currencyId: String) {
+        findNavController().navigate(R.id.action_Home_to_Details)
     }
 
     private fun showMessage(text: String?) {

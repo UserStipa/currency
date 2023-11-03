@@ -2,6 +2,7 @@ package com.userstipa.currency.ui.home
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -11,8 +12,14 @@ import com.userstipa.currency.R
 import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
+interface HomeAdapterListener {
+    fun onClickCurrency(view: View, currencyId: String)
+}
+
+
 class HomeAdapter(
-    context: Context
+    context: Context,
+    private val listener: HomeAdapterListener
 ) : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
@@ -55,6 +62,9 @@ class HomeAdapter(
             price.text = currency.priceUsd
             changePercent24Hr.text = currency.changePercent24Hr
             changePercent24Hr.setTextColor(changePercent24HrColor)
+        }
+        holder.itemView.setOnClickListener { view ->
+            listener.onClickCurrency(view, currency.id)
         }
     }
 
