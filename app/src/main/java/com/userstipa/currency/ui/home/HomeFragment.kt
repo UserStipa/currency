@@ -19,6 +19,7 @@ import com.google.android.material.transition.MaterialElevationScale
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentHomeBinding
+import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -93,9 +94,9 @@ class HomeFragment : Fragment(), HomeAdapterListener {
         }
     }
 
-    override fun onClickCurrency(view: View, currencyId: String) {
+    override fun onClickCurrency(view: View, currency: CurrencyPriceDetail) {
         val extras = FragmentNavigatorExtras(view to view.transitionName)
-        findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(currencyId), extras)
+        findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name), extras)
     }
 
     private fun showMessage(text: String?) {

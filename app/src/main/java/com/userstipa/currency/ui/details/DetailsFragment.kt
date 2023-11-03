@@ -47,6 +47,7 @@ class DetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        binding.name.text = args.currencyName
         binding.cardView.transitionName = args.currencyId
         return binding.root
     }

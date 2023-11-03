@@ -14,7 +14,7 @@ import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
 
 interface HomeAdapterListener {
-    fun onClickCurrency(view: View, currencyId: String)
+    fun onClickCurrency(view: View, currency: CurrencyPriceDetail)
 }
 
 
@@ -64,9 +64,9 @@ class HomeAdapter(
             changePercent24Hr.text = currency.changePercent24Hr
             cardView.transitionName = currency.id
             changePercent24Hr.setTextColor(changePercent24HrColor)
-        }
-        holder.itemView.setOnClickListener { view ->
-            listener.onClickCurrency(view, currency.id)
+            cardView.setOnClickListener { view ->
+                listener.onClickCurrency(view, currency)
+            }
         }
     }
 
