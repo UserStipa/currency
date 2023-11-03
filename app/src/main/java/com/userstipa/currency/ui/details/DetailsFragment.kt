@@ -1,6 +1,7 @@
 package com.userstipa.currency.ui.details
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
 import com.userstipa.currency.databinding.FragmentDetailsBinding
 import kotlinx.coroutines.flow.collectLatest
@@ -31,12 +33,20 @@ class DetailsFragment : Fragment() {
         (context.applicationContext as App).appComponent.inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            scrimColor = Color.TRANSPARENT
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        binding.cardView.transitionName = args.currencyId
         return binding.root
     }
 

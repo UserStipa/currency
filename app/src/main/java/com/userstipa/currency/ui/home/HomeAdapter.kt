@@ -1,9 +1,11 @@
 package com.userstipa.currency.ui.home
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver.OnGlobalLayoutListener
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,6 +14,7 @@ import com.userstipa.currency.R
 import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
+
 interface HomeAdapterListener {
     fun onClickCurrency(view: View, currencyId: String)
 }
@@ -19,7 +22,8 @@ interface HomeAdapterListener {
 
 class HomeAdapter(
     context: Context,
-    private val listener: HomeAdapterListener
+    private val listener: HomeAdapterListener,
+    private val onLayoutReady: (listSize: Int) -> Unit
 ) : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
@@ -33,6 +37,14 @@ class HomeAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (list.isNotEmpty()) {
+                    onLayoutReady.invoke(list.size)
+                    recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                }
+            }
+        })
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -51,6 +63,7 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currency = list[position]
+        Log.d("TAG", "onBindViewHolder: ${currency}")
         val changePercent24HrColor = if (currency.isPositiveChangePercent24Hr) {
             colorPositiveNumber
         } else {
@@ -61,6 +74,7 @@ class HomeAdapter(
             symbol.text = currency.symbol
             price.text = currency.priceUsd
             changePercent24Hr.text = currency.changePercent24Hr
+            cardView.transitionName = currency.id
             changePercent24Hr.setTextColor(changePercent24HrColor)
         }
         holder.itemView.setOnClickListener { view ->

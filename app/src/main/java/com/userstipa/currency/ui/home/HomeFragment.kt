@@ -2,6 +2,7 @@ package com.userstipa.currency.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +12,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialElevationScale
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentHomeBinding
@@ -35,6 +38,12 @@ class HomeFragment : Fragment(), HomeAdapterListener {
         (context.applicationContext as App).appComponent.inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialElevationScale(false)
+        reenterTransition = MaterialElevationScale(true)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,10 +57,23 @@ class HomeFragment : Fragment(), HomeAdapterListener {
         setAdapter()
         setUi()
         setObservers()
+
+        postponeEnterTransition()
+        (requireView().parent as ViewGroup).viewTreeObserver.addOnPreDrawListener {
+            startPostponedEnterTransition()
+            Log.d("TAG", "onViewCreated")
+            true
+        }
     }
 
     private fun setAdapter() {
-        _adapter = HomeAdapter(requireContext(), this)
+        _adapter = HomeAdapter(
+            context = requireContext(),
+            listener = this,
+            onLayoutReady = {
+                Log.d("TAG", " list is ready")
+            }
+        )
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
     }
@@ -78,7 +100,8 @@ class HomeFragment : Fragment(), HomeAdapterListener {
     }
 
     override fun onClickCurrency(view: View, currencyId: String) {
-        findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(currencyId))
+        val extras = FragmentNavigatorExtras(view to view.transitionName)
+        findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(currencyId), extras)
     }
 
     private fun showMessage(text: String?) {
