@@ -2,10 +2,10 @@ package com.userstipa.currency.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -40,8 +40,12 @@ class HomeFragment : Fragment(), HomeAdapterListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        exitTransition = MaterialElevationScale(false)
-        reenterTransition = MaterialElevationScale(true)
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 500
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 500
+        }
     }
 
     override fun onCreateView(
@@ -59,21 +63,11 @@ class HomeFragment : Fragment(), HomeAdapterListener {
         setObservers()
 
         postponeEnterTransition()
-        (requireView().parent as ViewGroup).viewTreeObserver.addOnPreDrawListener {
-            startPostponedEnterTransition()
-            Log.d("TAG", "onViewCreated")
-            true
-        }
+        view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     private fun setAdapter() {
-        _adapter = HomeAdapter(
-            context = requireContext(),
-            listener = this,
-            onLayoutReady = {
-                Log.d("TAG", " list is ready")
-            }
-        )
+        _adapter = HomeAdapter(requireContext(), this)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
     }

@@ -37,6 +37,7 @@ class DetailsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             scrimColor = Color.TRANSPARENT
+            duration = 500
         }
     }
 
