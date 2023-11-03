@@ -78,7 +78,7 @@ class HomeFragment : Fragment(), HomeAdapterListener {
     }
 
     override fun onClickCurrency(view: View, currencyId: String) {
-        findNavController().navigate(R.id.action_Home_to_Details)
+        findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(currencyId))
     }
 
     private fun showMessage(text: String?) {

@@ -29,5 +29,9 @@
         android:id="@+id/DetailsFragment"
         android:name="com.userstipa.currency.ui.details.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="currencyId"
+            app:argType="string" />
+    </fragment>
 </navigation>
