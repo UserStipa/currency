@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
+import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentDetailsBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -48,7 +49,8 @@ class DetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         binding.name.text = args.currencyName
-        binding.cardView.transitionName = args.currencyId
+        binding.cardView.transitionName =
+            getString(R.string.shared_element_home_to_details, args.currencyId)
         return binding.root
     }
 

@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class HomeFragment : Fragment(), HomeAdapterListener {
+class HomeFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: HomeViewModelFactory
@@ -68,14 +68,24 @@ class HomeFragment : Fragment(), HomeAdapterListener {
     }
 
     private fun setAdapter() {
-        _adapter = HomeAdapter(requireContext(), this)
+        val onClickCurrency = { currency: CurrencyPriceDetail, view: View ->
+            val sharedElement = view to getString(R.string.shared_element_home_to_details, currency.id)
+            val extras = FragmentNavigatorExtras(sharedElement)
+            val direction = HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name)
+            findNavController().navigate(direction, extras)
+        }
+        _adapter = HomeAdapter(onClickCurrency)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
     }
 
     private fun setUi() {
-        binding.btnAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_Home_to_Search)
+        binding.btnAdd.transitionName = getString(R.string.shared_element_home_to_search)
+        binding.btnAdd.setOnClickListener { view ->
+            val sharedElement = view to getString(R.string.shared_element_home_to_search)
+            val extras = FragmentNavigatorExtras(sharedElement)
+            val direction = HomeFragmentDirections.actionHomeToSearch()
+            findNavController().navigate(direction, extras)
         }
         binding.update.setOnClickListener {
             viewModel.subscribeData()
@@ -92,11 +102,6 @@ class HomeFragment : Fragment(), HomeAdapterListener {
                 }
             }
         }
-    }
-
-    override fun onClickCurrency(view: View, currency: CurrencyPriceDetail) {
-        val extras = FragmentNavigatorExtras(view to view.transitionName)
-        findNavController().navigate(HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name), extras)
     }
 
     private fun showMessage(text: String?) {

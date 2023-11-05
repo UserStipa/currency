@@ -1,6 +1,5 @@
 package com.userstipa.currency.ui.home
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,20 +11,11 @@ import com.userstipa.currency.R
 import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
-
-interface HomeAdapterListener {
-    fun onClickCurrency(view: View, currency: CurrencyPriceDetail)
-}
-
-
 class HomeAdapter(
-    context: Context,
-    private val listener: HomeAdapterListener,
+    private val onClickCurrency: (currency: CurrencyPriceDetail, view: View) -> Unit
 ) : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
-    private val colorPositiveNumber = context.getColor(R.color.positiveNumbersColor)
-    private val colorNegativeNumber = context.getColor(R.color.negativeNumbersColor)
 
     var list: List<CurrencyPriceDetail>
         get() = diffUtil.currentList
@@ -52,20 +42,22 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currency = list[position]
+        val context = holder.itemView.context
+        val transitionName = context.getString(R.string.shared_element_home_to_details, currency.id)
         val changePercent24HrColor = if (currency.isPositiveChangePercent24Hr) {
-            colorPositiveNumber
+            context.getColor(R.color.positiveNumbersColor)
         } else {
-            colorNegativeNumber
+            context.getColor(R.color.negativeNumbersColor)
         }
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
             price.text = currency.priceUsd
             changePercent24Hr.text = currency.changePercent24Hr
-            cardView.transitionName = currency.id
             changePercent24Hr.setTextColor(changePercent24HrColor)
+            cardView.transitionName = transitionName
             cardView.setOnClickListener { view ->
-                listener.onClickCurrency(view, currency)
+                onClickCurrency.invoke(currency, view)
             }
         }
     }

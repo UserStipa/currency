@@ -53,6 +53,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_content_description"
+        android:transitionName="FAB"
         app:srcCompat="@drawable/baseline_add_24"/>
 
 

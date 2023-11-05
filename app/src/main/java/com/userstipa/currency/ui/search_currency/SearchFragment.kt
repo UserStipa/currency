@@ -1,6 +1,7 @@
 package com.userstipa.currency.ui.search_currency
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
+import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentSearchBinding
 import com.userstipa.currency.domain.model.Currency
 import kotlinx.coroutines.flow.collectLatest
@@ -34,25 +38,30 @@ class SearchFragment : Fragment(), SearchAdapterListener {
         (context.applicationContext as App).appComponent.inject(this)
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        viewModel.fetchData()
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            duration = 500
+            scrimColor = Color.TRANSPARENT
+            containerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            startContainerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            endContainerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+        }
+        postponeEnterTransition()
         setAdapter()
         setUi()
         setObservers()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewModel.fetchData()
     }
 
     private fun setAdapter() {
@@ -61,6 +70,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     }
 
     private fun setUi() {
+        binding.root.transitionName = getString(R.string.shared_element_home_to_search)
         binding.update.setOnClickListener {
             viewModel.fetchData()
         }
@@ -73,6 +83,9 @@ class SearchFragment : Fragment(), SearchAdapterListener {
                     adapter.list = uiState.list
                     binding.progressBar.isVisible = uiState.isLoading
                     showMessage(uiState.error)
+                    if (uiState.isLoadingComplete) {
+                        startPostponedEnterTransition()
+                    }
                 }
             }
         }
