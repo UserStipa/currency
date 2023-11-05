@@ -1,7 +1,7 @@
 package com.userstipa.currency.domain.usecases.subscribe_my_currencies
 
+import com.userstipa.currency.domain.model.Price
 import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
 import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
 import kotlinx.coroutines.flow.Flow
@@ -16,9 +16,9 @@ class SubscribeMyCurrenciesImpl @Inject constructor(
     private val newCurrenciesPrices: NewCurrenciesPrices
 ) : SubscribeMyCurrencies {
 
-    private var myCurrencies: List<CurrencyPriceDetail> = emptyList()
+    private var myCurrencies: List<CurrencyPrice> = emptyList()
 
-    override fun launch(): Flow<List<CurrencyPriceDetail>> = flow {
+    override fun launch(): Flow<List<CurrencyPrice>> = flow {
         myCurrencies = getMyCurrencies.launch().first()
         emit(myCurrencies)
 
@@ -29,7 +29,7 @@ class SubscribeMyCurrenciesImpl @Inject constructor(
         }.collect()
     }
 
-    private fun List<CurrencyPriceDetail>.updatePrices(newPrices: List<CurrencyPrice>): List<CurrencyPriceDetail> {
+    private fun List<CurrencyPrice>.updatePrices(newPrices: List<Price>): List<CurrencyPrice> {
         return map { currency ->
             val price = newPrices.find { it.id == currency.id }
             if (price == null) {

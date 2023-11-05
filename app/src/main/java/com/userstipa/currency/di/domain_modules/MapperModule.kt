@@ -3,12 +3,12 @@ package com.userstipa.currency.di.domain_modules
 import com.userstipa.currency.data.api.CurrencyDto
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.domain.mapper.MapperCurrency
-import com.userstipa.currency.domain.mapper.MapperCurrencyPriceDetail
 import com.userstipa.currency.domain.mapper.MapperCurrencyPrice
+import com.userstipa.currency.domain.mapper.MapperPrice
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.model.Price
 import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -24,14 +24,14 @@ class MapperModule {
 
     @Provides
     @Singleton
-    fun provideMapperCurrencyPriceDetail(): Mapper<CurrencyDto, CurrencyPriceDetail> {
-        return MapperCurrencyPriceDetail()
+    fun provideMapperCurrencyPriceDetail(): Mapper<CurrencyDto, CurrencyPrice> {
+        return MapperCurrencyPrice()
     }
 
     @Provides
     @Singleton
-    fun provideCurrencyPriceMapper(): Mapper<CurrencyPriceDto, CurrencyPrice> {
-        return MapperCurrencyPrice()
+    fun provideCurrencyPriceMapper(): Mapper<CurrencyPriceDto, Price> {
+        return MapperPrice()
     }
 
 }

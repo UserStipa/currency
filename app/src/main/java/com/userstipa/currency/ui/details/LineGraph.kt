@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import com.userstipa.currency.R
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
+import com.userstipa.currency.domain.model.CurrencyPrice
 
 class LineGraph @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0
@@ -15,7 +15,7 @@ class LineGraph @JvmOverloads constructor(
         initAttributes(attrs, defStyleAttr, defStyleRes)
     }
 
-    var currency: CurrencyPriceDetail? = null
+    var currency: CurrencyPrice? = null
         set(value) {
             field = value
             invalidate()

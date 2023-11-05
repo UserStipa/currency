@@ -19,7 +19,7 @@ import com.google.android.material.transition.MaterialElevationScale
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentHomeBinding
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
+import com.userstipa.currency.domain.model.CurrencyPrice
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -68,7 +68,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        val onClickCurrency = { currency: CurrencyPriceDetail, view: View ->
+        val onClickCurrency = { currency: CurrencyPrice, view: View ->
             val sharedElement = view to getString(R.string.shared_element_home_to_details, currency.id)
             val extras = FragmentNavigatorExtras(sharedElement)
             val direction = HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name)

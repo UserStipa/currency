@@ -5,8 +5,8 @@ import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.domain.mapper.Mapper
 import com.userstipa.currency.domain.model.Currency
+import com.userstipa.currency.domain.model.Price
 import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
@@ -53,7 +53,7 @@ class DomainModule {
     @Singleton
     fun provideGetMyCurrencies(
         repository: Repository,
-        mapper: Mapper<CurrencyDto, CurrencyPriceDetail>
+        mapper: Mapper<CurrencyDto, CurrencyPrice>
     ): GetMyCurrencies {
         return GetMyCurrenciesImpl(repository, mapper)
     }
@@ -62,7 +62,7 @@ class DomainModule {
     @Singleton
     fun provideGetNewCurrencies(
         repository: Repository,
-        mapper: Mapper<CurrencyPriceDto, CurrencyPrice>
+        mapper: Mapper<CurrencyPriceDto, Price>
     ): NewCurrenciesPrices {
         return NewCurrenciesPricesImpl(repository, mapper)
     }
