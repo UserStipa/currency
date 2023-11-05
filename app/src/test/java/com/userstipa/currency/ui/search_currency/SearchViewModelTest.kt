@@ -37,7 +37,7 @@ class SearchViewModelTest {
             Currency("bitcoin3", "Bitcoin_2", "BTC_2", false),
             Currency("bitcoin4", "Bitcoin_3", "BTC_3", false),
         )
-        val expectedValue = SearchUiState(list = allCurrencies)
+        val expectedValue = SearchUiState(list = allCurrencies, isLoadingComplete = true)
 
         getRemoteCurrencies.launchResult = allCurrencies
         viewModel.fetchData()
@@ -48,7 +48,7 @@ class SearchViewModelTest {
     @Test
     fun `get all currencies - lost connection`() = runTest {
         val exception = IOException()
-        val expectedValue = SearchUiState(error = "Lost internet connection")
+        val expectedValue = SearchUiState(error = "Lost internet connection", isLoadingComplete = true)
 
         getRemoteCurrencies.launchException = exception
         viewModel.fetchData()
@@ -59,7 +59,7 @@ class SearchViewModelTest {
     @Test
     fun `get all currencies - error`() = runTest {
         val exception = Exception("Test error")
-        val expectedValue = SearchUiState(error = exception.message)
+        val expectedValue = SearchUiState(error = exception.message, isLoadingComplete = true)
 
         getRemoteCurrencies.launchException = exception
         viewModel.fetchData()

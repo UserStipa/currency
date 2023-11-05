@@ -46,6 +46,7 @@ class HomeViewModelTest {
         )
         val expectedValue = HomeUiState(
             isLoading = false,
+            isLoadingComplete = true,
             error = null,
             list = myCurrencies
         )
@@ -60,6 +61,7 @@ class HomeViewModelTest {
     fun `subscribe to my currencies - lost connection`() {
         val expectedValue = HomeUiState(
             isLoading = false,
+            isLoadingComplete = true,
             error = "Lost internet connection",
             list = emptyList()
         )
@@ -74,6 +76,7 @@ class HomeViewModelTest {
     fun `subscribe to my currencies - exception`() {
         val expectedValue = HomeUiState(
             isLoading = false,
+            isLoadingComplete = true,
             error = "Test error",
             list = emptyList()
         )
@@ -134,6 +137,7 @@ class HomeViewModelTest {
 
         val expectedValueBeforeUnsubscribe = HomeUiState(
             isLoading = false,
+            isLoadingComplete = true,
             error = null,
             list = myCurrencies[0]
         )
@@ -142,11 +146,12 @@ class HomeViewModelTest {
         viewModel.unsubscribeData()
         subscribeMyCurrenciesFake.emit(myCurrencies[1])
 
-        val expectedValueBAfterUnsubscribe = HomeUiState(
+        val expectedValueAfterUnsubscribe = HomeUiState(
             isLoading = false,
+            isLoadingComplete = true,
             error = null,
             list = myCurrencies[0]
         )
-        assertEquals(expectedValueBAfterUnsubscribe, viewModel.uiState.value)
+        assertEquals(expectedValueAfterUnsubscribe, viewModel.uiState.value)
     }
 }
