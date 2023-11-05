@@ -1,7 +1,7 @@
 package com.userstipa.currency.ui.home
 
-import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -12,12 +12,10 @@ import com.userstipa.currency.databinding.HomeItemListBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetail
 
 class HomeAdapter(
-    context: Context
+    private val onClickCurrency: (currency: CurrencyPriceDetail, view: View) -> Unit
 ) : RecyclerView.Adapter<HomeAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
-    private val colorPositiveNumber = context.getColor(R.color.positiveNumbersColor)
-    private val colorNegativeNumber = context.getColor(R.color.negativeNumbersColor)
 
     var list: List<CurrencyPriceDetail>
         get() = diffUtil.currentList
@@ -44,10 +42,12 @@ class HomeAdapter(
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currency = list[position]
+        val context = holder.itemView.context
+        val transitionName = context.getString(R.string.shared_element_home_to_details, currency.id)
         val changePercent24HrColor = if (currency.isPositiveChangePercent24Hr) {
-            colorPositiveNumber
+            context.getColor(R.color.positiveNumbersColor)
         } else {
-            colorNegativeNumber
+            context.getColor(R.color.negativeNumbersColor)
         }
         with(holder.binding) {
             name.text = currency.name
@@ -55,6 +55,10 @@ class HomeAdapter(
             price.text = currency.priceUsd
             changePercent24Hr.text = currency.changePercent24Hr
             changePercent24Hr.setTextColor(changePercent24HrColor)
+            cardView.transitionName = transitionName
+            cardView.setOnClickListener { view ->
+                onClickCurrency.invoke(currency, view)
+            }
         }
     }
 

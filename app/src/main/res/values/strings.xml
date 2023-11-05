@@ -6,5 +6,7 @@
     <!-- Home -->
     <string name="fab_content_description">Add new currency</string>
     <string name="update">Update</string>
+    <string name="shared_element_home_to_search">shared_element_home_to_search</string>
+    <string name="shared_element_home_to_details">shared_element_home_to_details_currencyId_%1s$</string>
 
 </resources>

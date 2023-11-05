@@ -5,17 +5,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.transition.MaterialElevationScale
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentHomeBinding
+import com.userstipa.currency.domain.model.CurrencyPriceDetail
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,6 +39,16 @@ class HomeFragment : Fragment() {
         (context.applicationContext as App).appComponent.inject(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 500
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 500
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -48,17 +62,30 @@ class HomeFragment : Fragment() {
         setAdapter()
         setUi()
         setObservers()
+
+        postponeEnterTransition()
+        view.doOnPreDraw { startPostponedEnterTransition() }
     }
 
     private fun setAdapter() {
-        _adapter = HomeAdapter(requireContext())
+        val onClickCurrency = { currency: CurrencyPriceDetail, view: View ->
+            val sharedElement = view to getString(R.string.shared_element_home_to_details, currency.id)
+            val extras = FragmentNavigatorExtras(sharedElement)
+            val direction = HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name)
+            findNavController().navigate(direction, extras)
+        }
+        _adapter = HomeAdapter(onClickCurrency)
         binding.list.layoutManager = LinearLayoutManager(requireContext())
         binding.list.adapter = adapter
     }
 
     private fun setUi() {
-        binding.btnAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+        binding.btnAdd.transitionName = getString(R.string.shared_element_home_to_search)
+        binding.btnAdd.setOnClickListener { view ->
+            val sharedElement = view to getString(R.string.shared_element_home_to_search)
+            val extras = FragmentNavigatorExtras(sharedElement)
+            val direction = HomeFragmentDirections.actionHomeToSearch()
+            findNavController().navigate(direction, extras)
         }
         binding.update.setOnClickListener {
             viewModel.subscribeData()

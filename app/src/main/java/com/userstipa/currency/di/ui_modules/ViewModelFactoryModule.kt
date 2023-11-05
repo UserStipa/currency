@@ -1,5 +1,6 @@
 package com.userstipa.currency.di.ui_modules
 
+import com.userstipa.currency.ui.details.DetailsViewModelFactory
 import com.userstipa.currency.ui.home.HomeViewModelFactory
 import com.userstipa.currency.ui.search_currency.SearchViewModelFactory
 import dagger.Module
@@ -16,6 +17,11 @@ class ViewModelFactoryModule {
     @Provides
     fun provideHomeViewModelFactory(): HomeViewModelFactory {
         return HomeViewModelFactory()
+    }
+
+    @Provides
+    fun provideDetailsViewModelFactory(): DetailsViewModelFactory {
+        return DetailsViewModelFactory()
     }
 
 }

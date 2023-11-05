@@ -11,6 +11,8 @@ import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesImpl
+import com.userstipa.currency.domain.usecases.get_currency.GetCurrency
+import com.userstipa.currency.domain.usecases.get_currency.GetCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrenciesImpl
 import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPrices
@@ -72,5 +74,14 @@ class DomainModule {
         newCurrenciesPrices: NewCurrenciesPrices
     ): SubscribeMyCurrencies {
         return SubscribeMyCurrenciesImpl(getMyCurrencies, newCurrenciesPrices)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCurrency(
+        repository: Repository,
+        mapper: Mapper<CurrencyDto, Currency>
+    ) : GetCurrency {
+        return GetCurrencyImpl(repository, mapper)
     }
 }

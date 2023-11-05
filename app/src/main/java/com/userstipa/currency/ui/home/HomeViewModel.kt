@@ -38,19 +38,28 @@ class HomeViewModel @Inject constructor(
                         is IOException -> _uiState.update {
                             HomeUiState(
                                 isLoading = false,
+                                isLoadingComplete = true,
                                 error = "Lost internet connection"
                             )
                         }
+
                         else -> _uiState.update {
                             HomeUiState(
                                 isLoading = false,
+                                isLoadingComplete = true,
                                 error = error.message
                             )
                         }
                     }
                 }
                 .collectLatest { result ->
-                    _uiState.update { HomeUiState(isLoading = false, list = result) }
+                    _uiState.update {
+                        HomeUiState(
+                            isLoading = false,
+                            isLoadingComplete = true,
+                            list = result
+                        )
+                    }
                 }
         }
     }
