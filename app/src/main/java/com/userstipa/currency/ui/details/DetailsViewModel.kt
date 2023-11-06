@@ -2,8 +2,10 @@ package com.userstipa.currency.ui.details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.userstipa.currency.di.dispatchers.DispatcherProvider
-import com.userstipa.currency.domain.usecases.get_currency.GetCurrency
+import com.userstipa.currency.di.dispatchers_module.DispatcherProvider
+import com.userstipa.currency.domain.model.HistoryRange
+import com.userstipa.currency.domain.model.HistoryRange.LAST_HOUR
+import com.userstipa.currency.domain.usecases.get_currency_price_details.GetCurrencyPriceDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -15,22 +17,25 @@ import javax.inject.Inject
 
 class DetailsViewModel @Inject constructor(
     private val dispatcher: DispatcherProvider,
-    private val getCurrency: GetCurrency
+    private val getCurrencyPriceDetails: GetCurrencyPriceDetails
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState: StateFlow<DetailsUiState> = _uiState
 
-    fun fetchData(currencyId: String) {
+    fun fetchData(currencyId: String, historyRange: HistoryRange = LAST_HOUR) {
         viewModelScope.launch(dispatcher.io) {
-            getCurrency.launch(currencyId)
+            getCurrencyPriceDetails.launch(currencyId, historyRange)
                 .onStart {
                     _uiState.update {
                         it.copy(isLoading = true, error = null)
                     }
                 }
                 .catch { error ->
-                    _uiState.update { DetailsUiState(error = error.message) }
+                    _uiState.update {
+                        error.printStackTrace()
+                        DetailsUiState(error = error.message)
+                    }
                 }
                 .collectLatest { result ->
                     _uiState.update { DetailsUiState(currency = result) }

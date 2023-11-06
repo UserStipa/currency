@@ -11,7 +11,7 @@ class MapperPrice : MapperBase<CurrencyPriceDto, Price>() {
             resultList.add(
                 Price(
                     id = it.id,
-                    priceUsd = formatPriceUsd(it.priceUsd)
+                    priceUsd = formatPriceUsd(it.priceUsd),
                 )
             )
         }

@@ -1,7 +1,7 @@
 package com.userstipa.currency.ui.home
 
 import androidx.lifecycle.ViewModel
-import com.userstipa.currency.di.dispatchers.DispatcherProvider
+import com.userstipa.currency.di.dispatchers_module.DispatcherProvider
 import com.userstipa.currency.domain.usecases.subscribe_my_currencies.SubscribeMyCurrencies
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

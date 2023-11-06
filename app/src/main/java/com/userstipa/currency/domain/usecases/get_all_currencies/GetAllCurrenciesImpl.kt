@@ -1,6 +1,6 @@
 package com.userstipa.currency.domain.usecases.get_all_currencies
 
-import com.userstipa.currency.data.api.CurrencyDto
+import com.userstipa.currency.data.api.get_currencies.CurrencyDto
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.domain.mapper.Mapper

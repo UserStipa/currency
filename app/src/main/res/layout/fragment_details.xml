@@ -20,6 +20,12 @@
             android:layout_margin="20dp"
             android:textSize="32sp"/>
 
+        <TextView
+            android:id="@+id/sizeOfHistory"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Empty"/>
 
     </RelativeLayout>
 

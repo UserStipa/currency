@@ -66,10 +66,16 @@ class DetailsFragment : Fragment() {
                 viewModel.uiState.collectLatest { uiState ->
                     uiState.currency?.let { currency ->
                         binding.name.text = currency.name
+                        binding.sizeOfHistory.text = currency.history.size.toString()
                     }
+                    uiState.error?.let { showMessage(it) }
                 }
             }
         }
+    }
+
+    private fun showMessage(message: String) {
+        binding.name.text = message
     }
 
 

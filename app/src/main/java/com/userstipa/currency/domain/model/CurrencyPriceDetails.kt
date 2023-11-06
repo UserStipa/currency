@@ -4,8 +4,8 @@ data class CurrencyPriceDetails(
     val id: String,
     val name: String,
     val symbol: String,
-    var priceUsd: Double,
-    val changePercent24Hr: Double,
+    var priceUsd: String,
+    val changePercent24Hr: String,
     val isPositiveChangePercent24Hr: Boolean,
     val marketCapUsd: String,
     val maxSupply: String,
@@ -14,4 +14,5 @@ data class CurrencyPriceDetails(
     val volumeUsd24Hr: String,
     val vwap24Hr: String,
     val explorer: String,
+    val history: List<PriceTime>
 )

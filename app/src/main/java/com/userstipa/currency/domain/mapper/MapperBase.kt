@@ -19,6 +19,10 @@ abstract class MapperBase<T, K>: Mapper<T, K> {
         return "${abs(BigDecimal(double).setScale(2, RoundingMode.UP).toDouble())}"
     }
 
+    protected fun formatDate(string: String): String {
+        return string
+    }
+
     abstract override fun map(input: List<T>): List<K>
 
 
