@@ -65,8 +65,7 @@ class DetailsFragment : Fragment() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
                     uiState.currency?.let { currency ->
-                        binding.name.text = currency.name
-                        binding.sizeOfHistory.text = currency.history.size.toString()
+                        binding.lineGraph.currency = currency
                     }
                     uiState.error?.let { showMessage(it) }
                 }

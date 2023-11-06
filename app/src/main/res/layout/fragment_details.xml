@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cardView"
     xmlns:tools="http://schemas.android.com/tools"
     style="?attr/materialCardViewElevatedStyle"
@@ -20,12 +21,12 @@
             android:layout_margin="20dp"
             android:textSize="32sp"/>
 
-        <TextView
-            android:id="@+id/sizeOfHistory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.userstipa.currency.ui.details.LineGraph
+            android:id="@+id/lineGraph"
+            android:layout_width="350dp"
+            android:layout_height="350dp"
             android:layout_centerInParent="true"
-            android:text="Empty"/>
+            app:colorOfLine="?attr/colorPrimary"/>
 
     </RelativeLayout>
 

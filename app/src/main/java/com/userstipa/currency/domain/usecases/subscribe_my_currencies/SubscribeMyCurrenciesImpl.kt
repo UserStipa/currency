@@ -35,7 +35,7 @@ class SubscribeMyCurrenciesImpl @Inject constructor(
             if (price == null) {
                 currency
             } else {
-                currency.copy(priceUsd = price.priceUsd)
+                currency.copy(priceUsdFormatted = price.priceUsdFormatted)
             }
         }
     }

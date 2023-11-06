@@ -2,5 +2,5 @@ package com.userstipa.currency.domain.model
 
 data class Price(
     val id: String,
-    val priceUsd: String
+    val priceUsdFormatted: String
 )

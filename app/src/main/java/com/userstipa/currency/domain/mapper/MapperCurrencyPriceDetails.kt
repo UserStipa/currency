@@ -13,7 +13,7 @@ class MapperCurrencyPriceDetails : MapperBase<CurrencyDto, CurrencyPriceDetails>
                     id = it.id,
                     name = it.name,
                     symbol = it.symbol,
-                    priceUsd = formatPriceUsd(it.priceUsd),
+                    priceUsdFormatted = formatPriceUsd(it.priceUsd),
                     changePercent24Hr = formatChangePercent24Hr(it.changePercent24Hr),
                     isPositiveChangePercent24Hr = (it.changePercent24Hr >= 0),
                     marketCapUsd = it.marketCapUsd,

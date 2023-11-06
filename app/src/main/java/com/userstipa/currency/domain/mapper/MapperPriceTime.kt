@@ -10,7 +10,8 @@ class MapperPriceTime : MapperBase<PriceTimeDto, PriceTime>() {
         input.forEach {
             resultList.add(
                 PriceTime(
-                    priceUsd = formatPriceUsd(it.priceUsd),
+                    priceUsd = it.priceUsd,
+                    priceUsdFormatted = formatPriceUsd(it.priceUsd),
                     dateTime = formatDate(it.date)
                 )
             )

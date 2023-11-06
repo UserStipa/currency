@@ -4,7 +4,7 @@ data class CurrencyPriceDetails(
     val id: String,
     val name: String,
     val symbol: String,
-    var priceUsd: String,
+    var priceUsdFormatted: String,
     val changePercent24Hr: String,
     val isPositiveChangePercent24Hr: Boolean,
     val marketCapUsd: String,

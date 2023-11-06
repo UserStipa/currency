@@ -52,7 +52,7 @@ class HomeAdapter(
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
-            price.text = currency.priceUsd
+            price.text = currency.priceUsdFormatted
             changePercent24Hr.text = currency.changePercent24Hr
             changePercent24Hr.setTextColor(changePercent24HrColor)
             cardView.transitionName = transitionName
