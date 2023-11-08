@@ -16,6 +16,7 @@ import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentDetailsBinding
+import com.userstipa.currency.domain.model.CurrencyPriceDetails
 import com.userstipa.currency.domain.model.HistoryRange
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -66,7 +67,7 @@ class DetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
-                    uiState.currency?.let { currency -> binding.lineGraph.currency = currency }
+                    uiState.currency?.let { setCurrency(it) }
                     uiState.error?.let { showMessage(it) }
                 }
             }
@@ -79,6 +80,20 @@ class DetailsFragment : Fragment() {
                 val historyRange = getHistoryRange(checkedId)
                 viewModel.fetchData(args.currencyId, historyRange)
             }
+        }
+    }
+
+    private fun setCurrency(currency: CurrencyPriceDetails) {
+        binding.apply {
+            lineGraph.currency = currency
+            maxPrice.text = currency.history.maxBy { it.priceUsd }.priceUsdFormatted
+            minPrice.text = currency.history.minBy { it.priceUsd }.priceUsdFormatted
+            marketCapUsd.text = currency.marketCapUsd
+            supply.text = currency.supply
+            maxSupply.text = currency.maxSupply
+            vwap24hr.text = currency.vwap24Hr
+            explorer.text = currency.explorer
+
         }
     }
 

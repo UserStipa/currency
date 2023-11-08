@@ -1,86 +1,273 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardView"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardView"
     style="?attr/materialCardViewElevatedStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="20dp"
     tools:context=".ui.details.DetailsFragment">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
-            android:textSize="32sp"/>
-
-        <com.userstipa.currency.ui.details.LineGraph
-            android:id="@+id/lineGraph"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="380dp"
-            android:layout_below="@id/name"
-            android:layout_centerInParent="true"
-            app:colorOfLine="?attr/colorPrimary" />
+            android:layout_height="wrap_content">
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/toggleButton"
-            app:singleSelection="true"
-            app:selectionRequired="true"
-            app:checkedButton="@id/day"
-            android:layout_below="@id/lineGraph"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp">
-            <Button
-                style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/hour"
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="20dp"
+                android:textSize="32sp" />
+
+            <com.userstipa.currency.ui.details.LineGraph
+                android:id="@+id/lineGraph"
+                android:layout_width="match_parent"
+                android:layout_height="380dp"
+                android:layout_below="@id/name"
+                android:layout_centerInParent="true"
+                app:colorOfLine="?attr/colorPrimary" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggleButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/one_hour"
-                />
-            <Button
-                style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/day"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/one_day"
-                />
-            <Button
-                style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/week"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/one_week"
-                />
-            <Button
-                style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/month"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/one_month"
-                />
-            <Button
-                style="?attr/materialButtonOutlinedStyle"
-                android:id="@+id/year"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/one_year"
-                />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
+                android:layout_below="@id/lineGraph"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="25dp"
+                app:checkedButton="@id/day"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <Button
+                    android:id="@+id/hour"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/one_hour" />
+
+                <Button
+                    android:id="@+id/day"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/one_day" />
+
+                <Button
+                    android:id="@+id/week"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/one_week" />
+
+                <Button
+                    android:id="@+id/month"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/one_month" />
+
+                <Button
+                    android:id="@+id/year"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/one_year" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
 
 
-    </RelativeLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="18dp"
+                android:layout_marginBottom="18dp"
+                android:layout_below="@id/toggleButton">
 
+                <TableRow
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/max_price"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/maxPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/max_price"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/min_price"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/minPrice"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/min_price"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/market_capitalization_usd"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/marketCapUsd"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/market_capitalization_usd"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/supply"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/supply"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/supply"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/rowMaxSupply"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/max_supply"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/maxSupply"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/max_supply"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/rowVwap24hr"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/vwap24hr"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/vwap24hr"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/vwap24hr"
+                        android:textSize="20sp" />
+                </TableRow>
+
+                <TableRow
+                    android:id="@+id/rowExplorer"
+                    android:paddingVertical="8dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@string/explorer"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/explorer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:gravity="end"
+                        android:maxLines="1"
+                        android:text="@string/explorer"
+                        android:textSize="20sp" />
+                </TableRow>
+
+            </TableLayout>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
 </com.google.android.material.card.MaterialCardView>
