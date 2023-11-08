@@ -35,8 +35,6 @@ class LineGraph @JvmOverloads constructor(
     private val lineWidth = 3f
 
     private var borderRect = RectF()
-    private var borderPaint = Paint()
-    private var borderWidth = 2f
 
     init {
         initAttributes(attrs, defStyleAttr, defStyleRes)
@@ -72,11 +70,6 @@ class LineGraph @JvmOverloads constructor(
             )
             color = colorOfLine
         }
-        borderPaint = Paint().apply {
-            style = Paint.Style.STROKE
-            color = Color.RED
-            strokeWidth = borderWidth
-        }
     }
 
     private fun calculateBorderRect() {
@@ -109,14 +102,9 @@ class LineGraph @JvmOverloads constructor(
         super.onDraw(canvas)
         if (currency == null) return
         drawLine(canvas)
-        drawRect(canvas)
     }
 
     private fun drawLine(canvas: Canvas) {
         canvas.drawPath(linePath, linePaint)
-    }
-
-    private fun drawRect(canvas: Canvas) {
-        canvas.drawRect(borderRect, borderPaint)
     }
 }

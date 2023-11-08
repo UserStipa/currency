@@ -16,6 +16,7 @@ import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentDetailsBinding
+import com.userstipa.currency.domain.model.HistoryRange
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,20 +57,39 @@ class DetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.fetchData(args.currencyId)
         setObservers()
+        setUi()
+        viewModel.fetchData(args.currencyId, getHistoryRange(binding.toggleButton.checkedButtonId))
     }
 
     private fun setObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
-                    uiState.currency?.let { currency ->
-                        binding.lineGraph.currency = currency
-                    }
+                    uiState.currency?.let { currency -> binding.lineGraph.currency = currency }
                     uiState.error?.let { showMessage(it) }
                 }
             }
+        }
+    }
+
+    private fun setUi() {
+        binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                val historyRange = getHistoryRange(checkedId)
+                viewModel.fetchData(args.currencyId, historyRange)
+            }
+        }
+    }
+
+    private fun getHistoryRange(checkedId: Int): HistoryRange {
+        return when (checkedId) {
+            R.id.hour -> HistoryRange.LAST_HOUR
+            R.id.day -> HistoryRange.LAST_DAY
+            R.id.week -> HistoryRange.LAST_WEEK
+            R.id.month -> HistoryRange.LAST_MONTH
+            R.id.year -> HistoryRange.LAST_YEAR
+            else -> HistoryRange.LAST_DAY
         }
     }
 
