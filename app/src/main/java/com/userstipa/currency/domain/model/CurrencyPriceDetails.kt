@@ -5,6 +5,8 @@ data class CurrencyPriceDetails(
     val name: String,
     val symbol: String,
     var priceUsdFormatted: String,
+    val maxPriceUsdFormatted: String?,
+    val minPriceUsdFormatted: String?,
     val changePercent24Hr: String,
     val isPositiveChangePercent24Hr: Boolean,
     val marketCapUsd: String,
@@ -14,5 +16,5 @@ data class CurrencyPriceDetails(
     val volumeUsd24Hr: String,
     val vwap24Hr: String,
     val explorer: String,
-    val history: List<PriceTime>
+    val history: List<PriceTime>,
 )

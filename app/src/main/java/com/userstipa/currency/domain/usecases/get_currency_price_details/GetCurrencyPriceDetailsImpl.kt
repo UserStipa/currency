@@ -19,8 +19,6 @@ class GetCurrencyPriceDetailsImpl @Inject constructor(
     private val mapperPriceTime: Mapper<PriceTimeDto, PriceTime>
 ) : GetCurrencyPriceDetails {
 
-    //TODO Check empty history
-
     override fun launch(id: String, historyRange: HistoryRange): Flow<CurrencyPriceDetails> = flow {
         val currency = repository.getRemoteCurrencies(id).let { response ->
             val data = response.body()!!.data
@@ -33,7 +31,11 @@ class GetCurrencyPriceDetailsImpl @Inject constructor(
             filterHistory(priceTime, historyRange)
         }
 
-        val result = currency.copy(history = history)
+        val result = currency.copy(
+            history = history,
+            maxPriceUsdFormatted = history.maxBy { it.priceUsd }.priceUsdFormatted,
+            minPriceUsdFormatted = history.minBy { it.priceUsd }.priceUsdFormatted
+        )
         emit(result)
     }
 

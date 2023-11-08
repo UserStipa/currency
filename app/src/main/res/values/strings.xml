@@ -8,6 +8,8 @@
     <string name="update">Update</string>
     <string name="shared_element_home_to_search">shared_element_home_to_search</string>
     <string name="shared_element_home_to_details">shared_element_home_to_details_currencyId_%1s$</string>
+
+    <!-- Details -->
     <string name="one_hour">1h</string>
     <string name="one_day">1d</string>
     <string name="one_week">1w</string>
@@ -15,7 +17,7 @@
     <string name="one_year">1y</string>
     <string name="max_price">Max Price</string>
     <string name="min_price">Min Price</string>
-    <string name="market_capitalization_usd">Market capitalization</string>
+    <string name="market_capitalization_usd">Capitalization</string>
     <string name="supply">Supply</string>
     <string name="max_supply">Max supply</string>
     <string name="vwap24hr">vwap24hr</string>

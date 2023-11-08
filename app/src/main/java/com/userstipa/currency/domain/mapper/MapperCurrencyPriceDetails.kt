@@ -16,21 +16,19 @@ class MapperCurrencyPriceDetails : MapperBase<CurrencyDto, CurrencyPriceDetails>
                     priceUsdFormatted = formatPriceUsd(it.priceUsd),
                     changePercent24Hr = formatChangePercent24Hr(it.changePercent24Hr),
                     isPositiveChangePercent24Hr = (it.changePercent24Hr >= 0),
-                    marketCapUsd = it.marketCapUsd,
+                    marketCapUsd = formatPriceUsd(it.marketCapUsd),
                     rank = it.rank,
-                    supply = it.supply,
+                    supply = formatSupply(it.supply) ?: NULL_VALUE,
                     volumeUsd24Hr = it.volumeUsd24Hr,
-                    maxSupply = it.maxSupply ?: NULL_VALUE,
-                    vwap24Hr = it.vwap24Hr ?: NULL_VALUE,
+                    maxSupply = formatSupply(it.maxSupply) ?: NULL_VALUE,
+                    vwap24Hr = formatVwap24Hr(it.vwap24Hr) ?: NULL_VALUE,
                     explorer = it.explorer ?: NULL_VALUE,
-                    history = emptyList()
+                    history = emptyList(),
+                    maxPriceUsdFormatted = NULL_VALUE,
+                    minPriceUsdFormatted = NULL_VALUE,
                 )
             )
         }
         return resultList
-    }
-
-    companion object {
-        private const val NULL_VALUE = "N/A"
     }
 }

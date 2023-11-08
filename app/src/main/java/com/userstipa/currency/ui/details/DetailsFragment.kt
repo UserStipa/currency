@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -67,8 +68,9 @@ class DetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
+                    binding.progressBar.isVisible = uiState.isLoading
                     uiState.currency?.let { setCurrency(it) }
-                    uiState.error?.let { showMessage(it) }
+                    showError(uiState.error)
                 }
             }
         }
@@ -85,15 +87,15 @@ class DetailsFragment : Fragment() {
 
     private fun setCurrency(currency: CurrencyPriceDetails) {
         binding.apply {
+            lineGraph.isVisible = true
             lineGraph.currency = currency
-            maxPrice.text = currency.history.maxBy { it.priceUsd }.priceUsdFormatted
-            minPrice.text = currency.history.minBy { it.priceUsd }.priceUsdFormatted
+            maxPrice.text = currency.maxPriceUsdFormatted
+            minPrice.text = currency.minPriceUsdFormatted
             marketCapUsd.text = currency.marketCapUsd
             supply.text = currency.supply
             maxSupply.text = currency.maxSupply
             vwap24hr.text = currency.vwap24Hr
             explorer.text = currency.explorer
-
         }
     }
 
@@ -108,8 +110,10 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun showMessage(message: String) {
-        binding.name.text = message
+    private fun showError(error: String?) {
+        binding.errorLayout.isVisible = (error != null)
+        binding.detailsLayout.isVisible = (error == null)
+        binding.error.text = error
     }
 
 
