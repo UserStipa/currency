@@ -3,8 +3,9 @@ package com.userstipa.currency.domain.model
 enum class HistoryRange(
     val timeInterval: String
 ) {
-    LAST_HOUR("m1"),
-    LAST_WEEK("h2"),
-    LAST_MONTH("h12"),
-    LAST_YEAR("d1")
+    LAST_HOUR(timeInterval = "m1"),
+    LAST_DAY(timeInterval = "m5"),
+    LAST_WEEK(timeInterval = "h2"),
+    LAST_MONTH(timeInterval = "h12"),
+    LAST_YEAR(timeInterval = "d1");
 }

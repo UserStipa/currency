@@ -8,7 +8,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import com.userstipa.currency.R
@@ -63,7 +62,6 @@ class LineGraph @JvmOverloads constructor(
     }
 
     private fun initPaint() {
-        Log.d("TAG", "initPaint")
         linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             style = Paint.Style.STROKE
             pathEffect = CornerPathEffect(35f)
@@ -86,7 +84,6 @@ class LineGraph @JvmOverloads constructor(
     }
 
     private fun calculateLinePath() {
-        Log.d("TAG", "initLinePath")
         currency?.let { currency ->
             linePath.reset()
             val list = currency.history
@@ -96,13 +93,9 @@ class LineGraph @JvmOverloads constructor(
             val xScale = (borderRect.width()) / (list.size - 1)
             val yScale = (borderRect.height()) / (maxPrice - minPrice).toFloat()
 
-            Log.d("TAG", "width: ${width} xScale: ${xScale}")
-
             for (i in list.indices) {
                 val x = ((i * xScale) + borderRect.left)
                 val y = ((maxPrice - list[i].priceUsd) * yScale + borderRect.top).toFloat()
-
-                Log.d("TAG", "x:${x} y:${y}")
 
                 with(linePath) {
                     if (i == 0) moveTo(x, y)
