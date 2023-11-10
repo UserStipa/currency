@@ -1,6 +1,6 @@
 package com.userstipa.currency.testUtil
 
-import com.userstipa.currency.di.dispatchers.DispatcherProvider
+import com.userstipa.currency.di.dispatchers_module.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

@@ -3,8 +3,8 @@ package com.userstipa.currency.domain.usecases.new_currencies_prices
 import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.data.websocket.CurrencyPriceWrapperDto
-import com.userstipa.currency.domain.mapper.MapperCurrencyPrice
-import com.userstipa.currency.domain.model.CurrencyPrice
+import com.userstipa.currency.domain.mapper.MapperPrice
+import com.userstipa.currency.domain.model.Price
 import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -21,7 +21,7 @@ class NewCurrenciesPricesTest {
     @Before
     fun setUp() {
         repositoryFake = RepositoryFake()
-        newCurrenciesPricesImpl = NewCurrenciesPricesImpl(repositoryFake, MapperCurrencyPrice())
+        newCurrenciesPricesImpl = NewCurrenciesPricesImpl(repositoryFake, MapperPrice())
     }
 
     @Test
@@ -34,8 +34,8 @@ class NewCurrenciesPricesTest {
             )
         )
         val expectedNewPrices = listOf(
-            CurrencyPrice(id = "bitcoin", priceUsd = "24,00 $"),
-            CurrencyPrice(id = "ethereum", priceUsd = "1 200,09 $"),
+            Price(id = "bitcoin", priceUsdFormatted = "24,00 $"),
+            Price(id = "ethereum", priceUsdFormatted = "1 200,09 $"),
         )
 
         repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
@@ -61,7 +61,7 @@ class NewCurrenciesPricesTest {
     @Test
     fun `websocket is close when my ids is empty`() = runTest {
         val myCurrenciesIds = setOf<String>()
-        val expectedEmptyNewPrices = emptyList<CurrencyPrice>()
+        val expectedEmptyNewPrices = emptyList<Price>()
 
         repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
         val actualValue = newCurrenciesPricesImpl.subscribe().first()

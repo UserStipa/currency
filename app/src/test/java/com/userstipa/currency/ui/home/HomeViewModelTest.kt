@@ -1,6 +1,6 @@
 package com.userstipa.currency.ui.home
 
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
+import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.usecases.subscribe_my_currencies.SubscribeMyCurrenciesFake
 import com.userstipa.currency.testUtil.DispatcherProviderFake
 import kotlinx.coroutines.test.runTest
@@ -25,20 +25,20 @@ class HomeViewModelTest {
     @Test
     fun `subscribe to my currencies - successful`() = runTest {
         val myCurrencies = listOf(
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "bitcoin",
                 name = "Bitcoin",
                 symbol = "BTC",
-                priceUsd = "34 312,79",
+                priceUsdFormatted = "34 312,79",
                 changePercent24Hr = "1.29",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "ethereum",
                 name = "Ethereum",
                 symbol = "ETH",
-                priceUsd = "12 000,00",
+                priceUsdFormatted = "12 000,00",
                 changePercent24Hr = "1.43",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
@@ -91,40 +91,40 @@ class HomeViewModelTest {
     fun `unsubscribe my currencies`() = runTest {
         val myCurrencies = listOf(
             listOf(
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "bitcoin",
                     name = "Bitcoin",
                     symbol = "BTC",
-                    priceUsd = "34 312,79",
+                    priceUsdFormatted = "34 312,79",
                     changePercent24Hr = "1.29",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 ),
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "ethereum",
                     name = "Ethereum",
                     symbol = "ETH",
-                    priceUsd = "12 000,00",
+                    priceUsdFormatted = "12 000,00",
                     changePercent24Hr = "1.43",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 )
             ),
             listOf(
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "bitcoin",
                     name = "Bitcoin",
                     symbol = "BTC",
-                    priceUsd = "21 200,10",
+                    priceUsdFormatted = "21 200,10",
                     changePercent24Hr = "1.29",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 ),
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "ethereum",
                     name = "Ethereum",
                     symbol = "ETH",
-                    priceUsd = "14 543,32",
+                    priceUsdFormatted = "14 543,32",
                     changePercent24Hr = "1.43",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true

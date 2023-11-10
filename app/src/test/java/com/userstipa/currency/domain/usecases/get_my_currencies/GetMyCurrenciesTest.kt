@@ -1,10 +1,10 @@
 package com.userstipa.currency.domain.usecases.get_my_currencies
 
-import com.userstipa.currency.data.api.CurrencyDto
-import com.userstipa.currency.data.api.GetCurrenciesDto
+import com.userstipa.currency.data.api.get_currencies.CurrencyDto
+import com.userstipa.currency.data.api.get_currencies.WrapperCurrenciesDto
 import com.userstipa.currency.data.local.PreferencesKeys
-import com.userstipa.currency.domain.mapper.MapperCurrencyPriceDetail
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
+import com.userstipa.currency.domain.mapper.MapperCurrencyPrice
+import com.userstipa.currency.domain.model.CurrencyPrice
 import com.userstipa.currency.domain.repository.RepositoryFake
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -22,39 +22,39 @@ class GetMyCurrenciesTest {
     @Before
     fun setUp() {
         repositoryFake = RepositoryFake()
-        getMyCurrenciesImpl = GetMyCurrenciesImpl(repositoryFake, MapperCurrencyPriceDetail())
+        getMyCurrenciesImpl = GetMyCurrenciesImpl(repositoryFake, MapperCurrencyPrice())
     }
 
     @Test
     fun `get my currencies - successful`() = runTest {
         val myCurrenciesIds = setOf("bitcoin")
         val remoteCurrencies = Response.success(
-            GetCurrenciesDto(
+            WrapperCurrenciesDto(
                 data = listOf(
                     CurrencyDto(
                         changePercent24Hr = 1.1119214668658208,
                         explorer = "https://blockchain.info/",
                         id = "bitcoin",
-                        marketCapUsd = "669720933191.1164966118771744",
-                        maxSupply = "21000000.0000000000000000",
+                        marketCapUsd = 669720933191.1164966118771744,
+                        maxSupply = 21000000.0000000000000000,
                         name = "Bitcoin",
                         priceUsd = 34312.7928147515751837,
                         rank = "1",
-                        supply = "19518112.0000000000000000",
+                        supply = 19518112.0000000000000000,
                         symbol = "BTC",
                         volumeUsd24Hr = "9567526018.0479966968956894",
-                        vwap24Hr = "34043.8912981619835247"
+                        vwap24Hr = 34043.8912981619835247
                     )
                 ),
                 timestamp = "000000"
             )
         )
         val expectedValue = listOf(
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "bitcoin",
                 name = "Bitcoin",
                 symbol = "BTC",
-                priceUsd = "34 312,79 $",
+                priceUsdFormatted = "34 312,79 $",
                 changePercent24Hr = "1.12",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = false
@@ -84,7 +84,7 @@ class GetMyCurrenciesTest {
     @Test
     fun `launch - empty myCurrenciesIds`() = runTest {
         val myCurrenciesIds = emptySet<String>()
-        val expectedValue = emptyList<CurrencyPriceDetail>()
+        val expectedValue = emptyList<CurrencyPrice>()
 
         repositoryFake.setPreferences(PreferencesKeys.MY_CURRENCIES, myCurrenciesIds)
         val actualValue = getMyCurrenciesImpl.launch().first()

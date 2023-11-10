@@ -1,7 +1,7 @@
 package com.userstipa.currency.domain.usecases.subscribe_my_currencies
 
 import com.userstipa.currency.domain.model.CurrencyPrice
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
+import com.userstipa.currency.domain.model.Price
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrenciesFake
 import com.userstipa.currency.domain.usecases.new_currencies_prices.NewCurrenciesPricesFake
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -35,20 +35,20 @@ class SubscribeMyCurrenciesTest {
         // First - init myCurrencies, second and third with new prices
 
         val myCurrencies = listOf(
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "bitcoin",
                 name = "Bitcoin",
                 symbol = "BTC",
-                priceUsd = "34 312,79",
+                priceUsdFormatted = "34 312,79",
                 changePercent24Hr = "1.29",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "ethereum",
                 name = "Ethereum",
                 symbol = "ETH",
-                priceUsd = "12 000,00",
+                priceUsdFormatted = "12 000,00",
                 changePercent24Hr = "1.43",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
@@ -56,78 +56,78 @@ class SubscribeMyCurrenciesTest {
         )
         val newPrices = listOf(
             listOf(
-                CurrencyPrice(
+                Price(
                     id = "bitcoin",
-                    priceUsd = "35 000,11"
+                    priceUsdFormatted = "35 000,11"
                 ),
-                CurrencyPrice(
+                Price(
                     id = "ethereum",
-                    priceUsd = "11 968,99"
+                    priceUsdFormatted = "11 968,99"
                 )
             ),
             listOf(
-                CurrencyPrice(
+                Price(
                     id = "ethereum",
-                    priceUsd = "11 542,32"
+                    priceUsdFormatted = "11 542,32"
                 )
             ),
         )
         val expectedValues = listOf(
             listOf(
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "bitcoin",
                     name = "Bitcoin",
                     symbol = "BTC",
-                    priceUsd = "34 312,79",
+                    priceUsdFormatted = "34 312,79",
                     changePercent24Hr = "1.29",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 ),
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "ethereum",
                     name = "Ethereum",
                     symbol = "ETH",
-                    priceUsd = "12 000,00",
+                    priceUsdFormatted = "12 000,00",
                     changePercent24Hr = "1.43",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 )
             ),
             listOf(
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "bitcoin",
                     name = "Bitcoin",
                     symbol = "BTC",
-                    priceUsd = "35 000,11",
+                    priceUsdFormatted = "35 000,11",
                     changePercent24Hr = "1.29",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 ),
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "ethereum",
                     name = "Ethereum",
                     symbol = "ETH",
-                    priceUsd = "11 968,99",
+                    priceUsdFormatted = "11 968,99",
                     changePercent24Hr = "1.43",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 )
             ),
             listOf(
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "bitcoin",
                     name = "Bitcoin",
                     symbol = "BTC",
-                    priceUsd = "35 000,11",
+                    priceUsdFormatted = "35 000,11",
                     changePercent24Hr = "1.29",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
                 ),
-                CurrencyPriceDetail(
+                CurrencyPrice(
                     id = "ethereum",
                     name = "Ethereum",
                     symbol = "ETH",
-                    priceUsd = "11 542,32",
+                    priceUsdFormatted = "11 542,32",
                     changePercent24Hr = "1.43",
                     isPositiveChangePercent24Hr = true,
                     isEnableCheckbox = true
@@ -136,7 +136,7 @@ class SubscribeMyCurrenciesTest {
         )
 
 
-        val results = mutableListOf<List<CurrencyPriceDetail>>()
+        val results = mutableListOf<List<CurrencyPrice>>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             subscribeMyCurrencies.launch().toList(results)
         }
@@ -154,20 +154,20 @@ class SubscribeMyCurrenciesTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `launch - empty myCurrencies`() = runTest {
-        val myCurrencies = listOf<CurrencyPriceDetail>()
+        val myCurrencies = listOf<CurrencyPrice>()
         val newPrices = listOf(
-            CurrencyPrice(
+            Price(
                 id = "bitcoin",
-                priceUsd = "35 000,11"
+                priceUsdFormatted = "35 000,11"
             ),
-            CurrencyPrice(
+            Price(
                 id = "ethereum",
-                priceUsd = "11 968,99"
+                priceUsdFormatted = "11 968,99"
             )
         )
-        val expectedValue = listOf<CurrencyPriceDetail>()
+        val expectedValue = listOf<CurrencyPrice>()
 
-        val results = mutableListOf<List<CurrencyPriceDetail>>()
+        val results = mutableListOf<List<CurrencyPrice>>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             subscribeMyCurrencies.launch().toList(results)
         }
@@ -183,48 +183,48 @@ class SubscribeMyCurrenciesTest {
     @Test
     fun `launch - empty newPrices`() = runTest {
         val myCurrencies = listOf(
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "bitcoin",
                 name = "Bitcoin",
                 symbol = "BTC",
-                priceUsd = "34 312,79",
+                priceUsdFormatted = "34 312,79",
                 changePercent24Hr = "1.29",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "ethereum",
                 name = "Ethereum",
                 symbol = "ETH",
-                priceUsd = "12 000,00",
+                priceUsdFormatted = "12 000,00",
                 changePercent24Hr = "1.43",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             )
         )
-        val newPrices = listOf<CurrencyPrice>()
+        val newPrices = listOf<Price>()
         val expectedValue = listOf(
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "bitcoin",
                 name = "Bitcoin",
                 symbol = "BTC",
-                priceUsd = "34 312,79",
+                priceUsdFormatted = "34 312,79",
                 changePercent24Hr = "1.29",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             ),
-            CurrencyPriceDetail(
+            CurrencyPrice(
                 id = "ethereum",
                 name = "Ethereum",
                 symbol = "ETH",
-                priceUsd = "12 000,00",
+                priceUsdFormatted = "12 000,00",
                 changePercent24Hr = "1.43",
                 isPositiveChangePercent24Hr = true,
                 isEnableCheckbox = true
             )
         )
 
-        val results = mutableListOf<List<CurrencyPriceDetail>>()
+        val results = mutableListOf<List<CurrencyPrice>>()
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             subscribeMyCurrencies.launch().toList(results)
         }
