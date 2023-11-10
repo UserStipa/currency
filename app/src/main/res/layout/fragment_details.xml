@@ -83,6 +83,7 @@
                     android:layout_below="@id/lineGraph"
                     android:layout_marginHorizontal="15dp"
                     android:layout_marginVertical="25dp"
+                    app:checkedButton="@id/day"
                     app:selectionRequired="true"
                     app:singleSelection="true">
 
