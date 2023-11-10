@@ -70,7 +70,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     }
 
     private fun setUi() {
-        binding.root.transitionName = getString(R.string.shared_element_home_to_search)
+        binding.root.transitionName = getString(R.string.transition_home_to_search)
         binding.update.setOnClickListener {
             viewModel.fetchData()
         }

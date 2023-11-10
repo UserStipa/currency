@@ -43,7 +43,7 @@ class HomeAdapter(
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val currency = list[position]
         val context = holder.itemView.context
-        val transitionName = context.getString(R.string.shared_element_home_to_details, currency.id)
+        val transitionName = context.getString(R.string.transition_home_to_details, currency.id)
         val changePercent24HrColor = if (currency.isPositiveChangePercent24Hr) {
             context.getColor(R.color.positiveNumbersColor)
         } else {

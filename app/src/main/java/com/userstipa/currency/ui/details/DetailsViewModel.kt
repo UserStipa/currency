@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.userstipa.currency.di.dispatchers_module.DispatcherProvider
 import com.userstipa.currency.domain.model.HistoryRange
-import com.userstipa.currency.domain.model.HistoryRange.LAST_HOUR
 import com.userstipa.currency.domain.usecases.get_currency_price_details.GetCurrencyPriceDetails
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -24,7 +23,7 @@ class DetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(DetailsUiState())
     val uiState: StateFlow<DetailsUiState> = _uiState
 
-    fun fetchData(currencyId: String, historyRange: HistoryRange = LAST_HOUR) {
+    fun fetchData(currencyId: String, historyRange: HistoryRange = HistoryRange.DEFAULT_VALUE) {
         viewModelScope.launch(dispatcher.io) {
             getCurrencyPriceDetails.launch(currencyId, historyRange)
                 .onStart {

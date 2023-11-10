@@ -19,6 +19,7 @@ import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentDetailsBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetails
 import com.userstipa.currency.domain.model.HistoryRange
+import com.userstipa.currency.ui.uitls.OnTransitionEnd
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,6 +32,8 @@ class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
     private val args: DetailsFragmentArgs by navArgs()
+    private val currencyId by lazy { args.currencyId }
+    private val currencyName by lazy { args.currencyName }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,21 +41,37 @@ class DetailsFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
-        binding.name.text = args.currencyName
-        binding.cardView.transitionName = getString(R.string.shared_element_home_to_details, args.currencyId)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val isFirstViewCreated = (savedInstanceState == null)
+        setUi(isFirstViewCreated)
+        viewModel.fetchData(currencyId, getHistoryRange(binding.toggleButton.checkedButtonId))
+    }
+
+    private fun setUi(isFirstViewCreated: Boolean) {
+        binding.apply {
+            name.text = currencyName
+            cardView.transitionName = getString(R.string.transition_home_to_details, currencyId)
+            update.setOnClickListener { viewModel.fetchData(currencyId) }
+            toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
+                if (isChecked) {
+                    viewModel.fetchData(currencyId, getHistoryRange(checkedId))
+                }
+            }
+        }
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             scrimColor = Color.TRANSPARENT
             duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
-            addListener(TransitionListener {
+            addListener(OnTransitionEnd(isFirstViewCreated) {
                 setObservers()
             })
         }
-        return binding.root
     }
 
     private fun setObservers() {
@@ -64,24 +83,6 @@ class DetailsFragment : Fragment() {
                     uiState.error?.let { showError(it) }
                 }
             }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setUi()
-        viewModel.fetchData(args.currencyId, getHistoryRange(binding.toggleButton.checkedButtonId))
-    }
-
-    private fun setUi() {
-        binding.toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            if (isChecked) {
-                val historyRange = getHistoryRange(checkedId)
-                viewModel.fetchData(args.currencyId, historyRange)
-            }
-        }
-        binding.update.setOnClickListener {
-            viewModel.fetchData(args.currencyId)
         }
     }
 

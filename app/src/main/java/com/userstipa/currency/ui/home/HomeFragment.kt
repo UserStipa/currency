@@ -69,7 +69,7 @@ class HomeFragment : Fragment() {
 
     private fun setAdapter() {
         val onClickCurrency = { currency: CurrencyPrice, view: View ->
-            val sharedElement = view to getString(R.string.shared_element_home_to_details, currency.id)
+            val sharedElement = view to getString(R.string.transition_home_to_details, currency.id)
             val extras = FragmentNavigatorExtras(sharedElement)
             val direction = HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name)
             findNavController().navigate(direction, extras)
@@ -80,9 +80,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUi() {
-        binding.btnAdd.transitionName = getString(R.string.shared_element_home_to_search)
+        binding.btnAdd.transitionName = getString(R.string.transition_home_to_search)
         binding.btnAdd.setOnClickListener { view ->
-            val sharedElement = view to getString(R.string.shared_element_home_to_search)
+            val sharedElement = view to getString(R.string.transition_home_to_search)
             val extras = FragmentNavigatorExtras(sharedElement)
             val direction = HomeFragmentDirections.actionHomeToSearch()
             findNavController().navigate(direction, extras)
