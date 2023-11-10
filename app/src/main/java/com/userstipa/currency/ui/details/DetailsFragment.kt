@@ -37,14 +37,6 @@ class DetailsFragment : Fragment() {
         (context.applicationContext as App).appComponent.inject(this)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            scrimColor = Color.TRANSPARENT
-            duration = 500
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,16 +44,15 @@ class DetailsFragment : Fragment() {
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         binding.name.text = args.currencyName
-        binding.cardView.transitionName =
-            getString(R.string.shared_element_home_to_details, args.currencyId)
+        binding.cardView.transitionName = getString(R.string.shared_element_home_to_details, args.currencyId)
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            scrimColor = Color.TRANSPARENT
+            duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
+            addListener(TransitionListener {
+                setObservers()
+            })
+        }
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setObservers()
-        setUi()
-        viewModel.fetchData(args.currencyId, getHistoryRange(binding.toggleButton.checkedButtonId))
     }
 
     private fun setObservers() {
@@ -70,10 +61,16 @@ class DetailsFragment : Fragment() {
                 viewModel.uiState.collectLatest { uiState ->
                     binding.progressBar.isVisible = uiState.isLoading
                     uiState.currency?.let { setCurrency(it) }
-                    showError(uiState.error)
+                    uiState.error?.let { showError(it) }
                 }
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUi()
+        viewModel.fetchData(args.currencyId, getHistoryRange(binding.toggleButton.checkedButtonId))
     }
 
     private fun setUi() {
@@ -83,11 +80,15 @@ class DetailsFragment : Fragment() {
                 viewModel.fetchData(args.currencyId, historyRange)
             }
         }
+        binding.update.setOnClickListener {
+            viewModel.fetchData(args.currencyId)
+        }
     }
 
     private fun setCurrency(currency: CurrencyPriceDetails) {
         binding.apply {
-            lineGraph.isVisible = true
+            detailsLayout.visibility = View.VISIBLE
+            errorLayout.visibility = View.INVISIBLE
             lineGraph.currency = currency
             maxPrice.text = currency.maxPriceUsdFormatted
             minPrice.text = currency.minPriceUsdFormatted
@@ -111,9 +112,11 @@ class DetailsFragment : Fragment() {
     }
 
     private fun showError(error: String?) {
-        binding.errorLayout.isVisible = (error != null)
-        binding.detailsLayout.isVisible = (error == null)
-        binding.error.text = error
+        binding.apply {
+            detailsLayout.visibility = View.INVISIBLE
+            errorLayout.visibility = View.VISIBLE
+            binding.error.text = error
+        }
     }
 
 

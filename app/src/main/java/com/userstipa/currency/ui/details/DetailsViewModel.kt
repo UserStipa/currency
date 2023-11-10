@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 class DetailsViewModel @Inject constructor(
@@ -32,9 +33,20 @@ class DetailsViewModel @Inject constructor(
                     }
                 }
                 .catch { error ->
-                    _uiState.update {
-                        error.printStackTrace()
-                        DetailsUiState(error = error.message)
+                    when (error) {
+                        is IOException -> _uiState.update {
+                            DetailsUiState(
+                                isLoading = false,
+                                error = "Lost internet connection"
+                            )
+                        }
+
+                        else -> _uiState.update {
+                            DetailsUiState(
+                                isLoading = false,
+                                error = error.message
+                            )
+                        }
                     }
                 }
                 .collectLatest { result ->

@@ -9,53 +9,56 @@
     android:layout_margin="15dp"
     tools:context=".ui.details.DetailsFragment">
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/errorLayout"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:visibility="gone">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/error"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center" />
-
-            <Button
-                android:id="@+id/update"
-                style="@style/Widget.Material3.Button.TextButton"
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/update" />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:indeterminate="true"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:id="@+id/errorLayout"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/error"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center" />
+
+                <Button
+                    android:id="@+id/update"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/update" />
 
 
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/detailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progressBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="10dp"
-                    android:indeterminate="true"
-                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/name"
@@ -136,9 +139,8 @@
                     <TableRow android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/max_price"
@@ -149,19 +151,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginStart="10dp"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/max_price"
                             android:textSize="18sp" />
                     </TableRow>
 
                     <TableRow android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/min_price"
@@ -172,19 +173,18 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginStart="10dp"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/min_price"
                             android:textSize="18sp" />
                     </TableRow>
 
                     <TableRow android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/market_capitalization_usd"
@@ -194,20 +194,19 @@
                             android:id="@+id/marketCapUsd"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
                             android:layout_weight="1"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/market_capitalization_usd"
                             android:textSize="18sp" />
                     </TableRow>
 
                     <TableRow android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/supply"
@@ -218,10 +217,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginStart="10dp"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/supply"
                             android:textSize="18sp" />
                     </TableRow>
 
@@ -230,9 +229,8 @@
                         android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/max_supply"
@@ -243,10 +241,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginStart="10dp"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/max_supply"
                             android:textSize="18sp" />
                     </TableRow>
 
@@ -255,9 +253,8 @@
                         android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/vwap24hr"
@@ -268,10 +265,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginStart="10dp"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/vwap24hr"
                             android:textSize="18sp" />
                     </TableRow>
 
@@ -280,9 +277,8 @@
                         android:paddingVertical="8dp">
 
                         <TextView
-                            android:layout_width="0dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:ellipsize="end"
                             android:maxLines="1"
                             android:text="@string/explorer"
@@ -293,10 +289,10 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:layout_marginStart="10dp"
                             android:ellipsize="end"
                             android:gravity="end"
                             android:maxLines="1"
-                            android:text="@string/explorer"
                             android:textSize="18sp" />
                     </TableRow>
 
@@ -304,9 +300,7 @@
 
             </RelativeLayout>
 
+        </RelativeLayout>
 
-        </ScrollView>
-
-
-    </RelativeLayout>
+    </ScrollView>
 </com.google.android.material.card.MaterialCardView>

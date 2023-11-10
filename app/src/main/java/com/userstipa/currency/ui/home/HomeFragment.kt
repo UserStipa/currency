@@ -42,10 +42,10 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         exitTransition = MaterialElevationScale(false).apply {
-            duration = 500
+            duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
         }
         reenterTransition = MaterialElevationScale(true).apply {
-            duration = 500
+            duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
         }
     }
 
