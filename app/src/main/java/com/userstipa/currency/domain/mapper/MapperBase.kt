@@ -15,11 +15,26 @@ abstract class MapperBase<T, K>: Mapper<T, K> {
         return "${decimalFormat.format(double)} $"
     }
 
+    protected fun formatSupply(double: Double?): String? {
+        return double?.let { decimalFormat.format(it) }
+    }
+
+    protected fun formatVwap24Hr(double: Double?): String? {
+        return double?.let { "${decimalFormat.format(it)} $" }
+    }
+
     protected fun formatChangePercent24Hr(double: Double): String {
         return "${abs(BigDecimal(double).setScale(2, RoundingMode.UP).toDouble())}"
     }
 
+    protected fun formatDate(string: String): String {
+        return string
+    }
+
     abstract override fun map(input: List<T>): List<K>
 
+    companion object {
+        const val NULL_VALUE = "N/A"
+    }
 
 }

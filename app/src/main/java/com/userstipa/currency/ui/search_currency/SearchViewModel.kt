@@ -2,7 +2,7 @@ package com.userstipa.currency.ui.search_currency
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.userstipa.currency.di.dispatchers.DispatcherProvider
+import com.userstipa.currency.di.dispatchers_module.DispatcherProvider
 import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies

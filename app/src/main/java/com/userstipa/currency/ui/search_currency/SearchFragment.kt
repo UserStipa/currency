@@ -52,7 +52,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         sharedElementEnterTransition = MaterialContainerTransform().apply {
-            duration = 500
+            duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
             scrimColor = Color.TRANSPARENT
             containerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
             startContainerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
@@ -70,7 +70,7 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     }
 
     private fun setUi() {
-        binding.root.transitionName = getString(R.string.shared_element_home_to_search)
+        binding.root.transitionName = getString(R.string.transition_home_to_search)
         binding.update.setOnClickListener {
             viewModel.fetchData()
         }

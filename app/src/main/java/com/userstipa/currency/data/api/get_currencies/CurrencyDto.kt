@@ -1,16 +1,16 @@
-package com.userstipa.currency.data.api
+package com.userstipa.currency.data.api.get_currencies
 
 data class CurrencyDto(
     val changePercent24Hr: Double,
-    val explorer: String,
     val id: String,
-    val marketCapUsd: String,
-    val maxSupply: String,
+    val marketCapUsd: Double,
     val name: String,
     var priceUsd: Double,
     val rank: String,
-    val supply: String,
+    val supply: Double,
     val symbol: String,
     val volumeUsd24Hr: String,
-    val vwap24Hr: String,
+    val maxSupply: Double?,
+    val vwap24Hr: Double?,
+    val explorer: String?,
 )

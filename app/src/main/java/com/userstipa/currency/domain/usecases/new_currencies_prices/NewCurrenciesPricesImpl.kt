@@ -4,7 +4,7 @@ import com.userstipa.currency.data.local.PreferencesKeys
 import com.userstipa.currency.data.repository.Repository
 import com.userstipa.currency.data.websocket.CurrencyPriceDto
 import com.userstipa.currency.domain.mapper.Mapper
-import com.userstipa.currency.domain.model.CurrencyPrice
+import com.userstipa.currency.domain.model.Price
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -13,10 +13,10 @@ import javax.inject.Inject
 
 class NewCurrenciesPricesImpl @Inject constructor(
     private val repository: Repository,
-    private val mapper: Mapper<CurrencyPriceDto, CurrencyPrice>
+    private val mapper: Mapper<CurrencyPriceDto, Price>
 ) : NewCurrenciesPrices {
 
-    override suspend fun subscribe(): Flow<List<CurrencyPrice>> = flow {
+    override suspend fun subscribe(): Flow<List<Price>> = flow {
         val myCurrenciesIds = repository.getPreferences(PreferencesKeys.MY_CURRENCIES)
         if (myCurrenciesIds.isEmpty()) {
             emit(emptyList())

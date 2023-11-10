@@ -1,4 +1,4 @@
-package com.userstipa.currency.di.dispatchers
+package com.userstipa.currency.di.dispatchers_module
 
 import dagger.Module
 import dagger.Provides

@@ -19,7 +19,7 @@ import com.google.android.material.transition.MaterialElevationScale
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentHomeBinding
-import com.userstipa.currency.domain.model.CurrencyPriceDetail
+import com.userstipa.currency.domain.model.CurrencyPrice
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,10 +42,10 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         exitTransition = MaterialElevationScale(false).apply {
-            duration = 500
+            duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
         }
         reenterTransition = MaterialElevationScale(true).apply {
-            duration = 500
+            duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
         }
     }
 
@@ -68,8 +68,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapter() {
-        val onClickCurrency = { currency: CurrencyPriceDetail, view: View ->
-            val sharedElement = view to getString(R.string.shared_element_home_to_details, currency.id)
+        val onClickCurrency = { currency: CurrencyPrice, view: View ->
+            val sharedElement = view to getString(R.string.transition_home_to_details, currency.id)
             val extras = FragmentNavigatorExtras(sharedElement)
             val direction = HomeFragmentDirections.actionHomeToDetails(currency.id, currency.name)
             findNavController().navigate(direction, extras)
@@ -80,9 +80,9 @@ class HomeFragment : Fragment() {
     }
 
     private fun setUi() {
-        binding.btnAdd.transitionName = getString(R.string.shared_element_home_to_search)
+        binding.btnAdd.transitionName = getString(R.string.transition_home_to_search)
         binding.btnAdd.setOnClickListener { view ->
-            val sharedElement = view to getString(R.string.shared_element_home_to_search)
+            val sharedElement = view to getString(R.string.transition_home_to_search)
             val extras = FragmentNavigatorExtras(sharedElement)
             val direction = HomeFragmentDirections.actionHomeToSearch()
             findNavController().navigate(direction, extras)
