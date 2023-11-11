@@ -14,6 +14,8 @@ import com.userstipa.currency.domain.usecases.add_currency.AddCurrency
 import com.userstipa.currency.domain.usecases.add_currency.AddCurrencyImpl
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrencies
 import com.userstipa.currency.domain.usecases.get_all_currencies.GetAllCurrenciesImpl
+import com.userstipa.currency.domain.usecases.get_currency_price_details.FilterHistory
+import com.userstipa.currency.domain.usecases.get_currency_price_details.FilterHistoryImpl
 import com.userstipa.currency.domain.usecases.get_currency_price_details.GetCurrencyPriceDetails
 import com.userstipa.currency.domain.usecases.get_currency_price_details.GetCurrencyPriceDetailsImpl
 import com.userstipa.currency.domain.usecases.get_my_currencies.GetMyCurrencies
@@ -72,12 +74,19 @@ class DomainModule {
 
     @Provides
     @Singleton
+    fun provideFilterHistory(): FilterHistory {
+        return FilterHistoryImpl()
+    }
+
+    @Provides
+    @Singleton
     fun provideGetCurrencyPriceDetails(
         repository: Repository,
         mapperCurrency: Mapper<CurrencyDto, CurrencyPriceDetails>,
-        mapperPriceTime: Mapper<PriceTimeDto, PriceTime>
+        mapperPriceTime: Mapper<PriceTimeDto, PriceTime>,
+        filterHistory: FilterHistory
     ) : GetCurrencyPriceDetails {
-        return GetCurrencyPriceDetailsImpl(repository, mapperCurrency, mapperPriceTime)
+        return GetCurrencyPriceDetailsImpl(repository, mapperCurrency, mapperPriceTime, filterHistory)
     }
 
     @Provides
