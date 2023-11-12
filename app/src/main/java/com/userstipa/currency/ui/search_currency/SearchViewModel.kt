@@ -39,7 +39,6 @@ class SearchViewModel @Inject constructor(
                         is IOException -> _uiState.update {
                             SearchUiState(
                                 isLoading = false,
-                                isLoadingComplete = true,
                                 error = "Lost internet connection"
                             )
                         }
@@ -47,7 +46,6 @@ class SearchViewModel @Inject constructor(
                         else -> _uiState.update {
                             SearchUiState(
                                 isLoading = false,
-                                isLoadingComplete = true,
                                 error = error.message
                             )
                         }
@@ -57,7 +55,6 @@ class SearchViewModel @Inject constructor(
                     _uiState.update {
                         SearchUiState(
                             isLoading = false,
-                            isLoadingComplete = true,
                             list = result
                         )
                     }

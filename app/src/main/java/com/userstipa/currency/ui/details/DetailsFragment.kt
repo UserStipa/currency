@@ -48,6 +48,7 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
+        viewModel.fetchData(currencyId)
         return binding.root
     }
 
@@ -55,7 +56,6 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val isFirstViewCreated = (savedInstanceState == null)
         setUi(isFirstViewCreated)
-        viewModel.fetchData(currencyId)
     }
 
     private fun setUi(isFirstViewCreated: Boolean) {

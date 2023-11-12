@@ -22,7 +22,8 @@ class GetAllCurrenciesImpl @Inject constructor(
         currencies.forEach { currency ->
             currency.isEnableCheckbox = (myCurrenciesIds.contains(currency.id))
         }
-        emit(currencies)
+        val result = currencies.sortedByDescending { it.isEnableCheckbox }
+        emit(result)
     }
 
 
