@@ -82,7 +82,7 @@ class GetMyCurrenciesTest {
     }
 
     @Test
-    fun `launch - empty myCurrenciesIds`() = runTest {
+    fun `get my currencies - empty myCurrenciesIds`() = runTest {
         val myCurrenciesIds = emptySet<String>()
         val expectedValue = emptyList<CurrencyPrice>()
 

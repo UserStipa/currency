@@ -13,11 +13,10 @@ class HomeViewModelTest {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var subscribeMyCurrenciesFake: SubscribeMyCurrenciesFake
-    private lateinit var dispatcherProviderFake: DispatcherProviderFake
 
     @Before
     fun setUp() {
-        dispatcherProviderFake = DispatcherProviderFake()
+        val dispatcherProviderFake = DispatcherProviderFake()
         subscribeMyCurrenciesFake = SubscribeMyCurrenciesFake()
         viewModel = HomeViewModel(subscribeMyCurrenciesFake, dispatcherProviderFake)
     }

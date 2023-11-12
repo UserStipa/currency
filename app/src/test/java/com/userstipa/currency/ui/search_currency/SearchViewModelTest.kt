@@ -17,15 +17,14 @@ class SearchViewModelTest {
     private lateinit var getRemoteCurrencies: GetAllCurrenciesFake
     private lateinit var addCurrency: AddCurrencyFake
     private lateinit var removeCurrency: RemoveCurrencyFake
-    private lateinit var dispatcher: DispatcherProviderFake
 
     @Before
     fun setUp() {
-        dispatcher = DispatcherProviderFake()
+        val dispatcherProviderFake = DispatcherProviderFake()
         getRemoteCurrencies = GetAllCurrenciesFake()
         addCurrency = AddCurrencyFake()
         removeCurrency = RemoveCurrencyFake()
-        viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcher)
+        viewModel = SearchViewModel(getRemoteCurrencies, addCurrency, removeCurrency, dispatcherProviderFake)
     }
 
 
