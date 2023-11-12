@@ -9,13 +9,9 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.userstipa.currency.databinding.SearchItemListBinding
 import com.userstipa.currency.domain.model.Currency
 
-interface SearchAdapterListener {
-    fun onClickAddCurrency(currency: Currency)
-    fun onClickRemoveCurrency(currency: Currency)
-}
-
 class SearchAdapter(
-    private val listener: SearchAdapterListener
+    private val onClickAddCurrency: (currency: Currency) -> Unit,
+    private val onClickRemoveCurrency: (currency: Currency) -> Unit
 ) : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
@@ -53,10 +49,10 @@ class SearchAdapter(
             checkbox.setOnClickListener {
                 if (checkbox.isChecked) {
                     list[holder.adapterPosition].isEnableCheckbox = true
-                    listener.onClickAddCurrency(currency)
+                    onClickAddCurrency(currency)
                 } else {
                     list[holder.adapterPosition].isEnableCheckbox = false
-                    listener.onClickRemoveCurrency(currency)
+                    onClickRemoveCurrency(currency)
                 }
             }
         }

@@ -18,27 +18,26 @@ import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentSearchBinding
-import com.userstipa.currency.domain.model.Currency
 import com.userstipa.currency.ui.uitls.OnTransitionEnd
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SearchFragment : Fragment(), SearchAdapterListener {
+class SearchFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: SearchViewModelFactory
     private val viewModel by viewModels<SearchViewModel> { viewModelFactory }
-    private val adapter = SearchAdapter(this)
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
+    private var _adapter: SearchAdapter? = null
+    private val adapter get() = _adapter!!
 
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (context.applicationContext as App).appComponent.inject(this)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,15 +51,25 @@ class SearchFragment : Fragment(), SearchAdapterListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val isFirstViewCreated = (savedInstanceState == null)
+        setAdapter()
         setUi(isFirstViewCreated, view)
     }
 
+    private fun setAdapter() {
+        _adapter = SearchAdapter(
+            onClickAddCurrency = { viewModel.addCurrency(it) },
+            onClickRemoveCurrency = { viewModel.removeCurrency(it) }
+        )
+        binding.apply {
+            list.layoutManager = LinearLayoutManager(requireContext())
+            list.adapter = adapter
+        }
+    }
+
     private fun setUi(isFirstViewCreated: Boolean, view: View) {
-        binding.list.layoutManager = LinearLayoutManager(requireContext())
-        binding.list.adapter = adapter
-        binding.root.transitionName = getString(R.string.transition_home_to_search)
-        binding.update.setOnClickListener {
-            viewModel.fetchData()
+        binding.apply {
+            root.transitionName = getString(R.string.transition_home_to_search)
+            update.setOnClickListener { viewModel.fetchData() }
         }
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
@@ -78,29 +87,25 @@ class SearchFragment : Fragment(), SearchAdapterListener {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
-                    adapter.list = uiState.list
+                    binding.errorLayout.visibility = View.INVISIBLE
                     binding.progressBar.isVisible = uiState.isLoading
-                    showMessage(uiState.error)
+                    adapter.list = uiState.list
+                    uiState.error?.let { showError(it) }
                 }
             }
         }
     }
 
-    private fun showMessage(text: String?) {
-        binding.messageLayout.isVisible = (text != null)
-        binding.message.text = text
-    }
-
-    override fun onClickAddCurrency(currency: Currency) {
-        viewModel.addCurrency(currency)
-    }
-
-    override fun onClickRemoveCurrency(currency: Currency) {
-        viewModel.removeCurrency(currency)
+    private fun showError(text: String?) {
+        binding.apply {
+            binding.errorLayout.visibility = View.VISIBLE
+            binding.error.text = text
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        _adapter = null
     }
 }
