@@ -5,6 +5,7 @@ Minimalistic tracker of cryptocurrency in real time
 * Detailed information about currency
 * Course line graph for recent periods
 * Minimalistic design and animations
+* Unit tests
 # Screenshots
 <div style="display: flex;">
   <img src="screenshots/details.jpg" width=30%>
