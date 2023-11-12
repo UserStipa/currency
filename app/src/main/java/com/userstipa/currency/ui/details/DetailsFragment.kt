@@ -18,7 +18,11 @@ import com.userstipa.currency.App
 import com.userstipa.currency.R
 import com.userstipa.currency.databinding.FragmentDetailsBinding
 import com.userstipa.currency.domain.model.CurrencyPriceDetails
-import com.userstipa.currency.domain.model.HistoryRange
+import com.userstipa.currency.domain.model.HistoryRange.LAST_DAY
+import com.userstipa.currency.domain.model.HistoryRange.LAST_HOUR
+import com.userstipa.currency.domain.model.HistoryRange.LAST_MONTH
+import com.userstipa.currency.domain.model.HistoryRange.LAST_WEEK
+import com.userstipa.currency.domain.model.HistoryRange.LAST_YEAR
 import com.userstipa.currency.ui.uitls.OnTransitionEnd
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -51,7 +55,7 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val isFirstViewCreated = (savedInstanceState == null)
         setUi(isFirstViewCreated)
-        viewModel.fetchData(currencyId, getHistoryRange(binding.toggleButton.checkedButtonId))
+        viewModel.fetchData(currencyId)
     }
 
     private fun setUi(isFirstViewCreated: Boolean) {
@@ -59,11 +63,11 @@ class DetailsFragment : Fragment() {
             name.text = currencyName
             cardView.transitionName = getString(R.string.transition_home_to_details, currencyId)
             update.setOnClickListener { viewModel.fetchData(currencyId) }
-            toggleButton.addOnButtonCheckedListener { group, checkedId, isChecked ->
-                if (isChecked) {
-                    viewModel.fetchData(currencyId, getHistoryRange(checkedId))
-                }
-            }
+            hour.setOnClickListener { viewModel.fetchData(currencyId, LAST_HOUR) }
+            day.setOnClickListener { viewModel.fetchData(currencyId, LAST_DAY) }
+            week.setOnClickListener { viewModel.fetchData(currencyId, LAST_WEEK) }
+            month.setOnClickListener { viewModel.fetchData(currencyId, LAST_MONTH) }
+            year.setOnClickListener { viewModel.fetchData(currencyId, LAST_YEAR) }
         }
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             scrimColor = Color.TRANSPARENT
@@ -81,6 +85,15 @@ class DetailsFragment : Fragment() {
                     binding.progressBar.isVisible = uiState.isLoading
                     uiState.currency?.let { setCurrency(it) }
                     uiState.error?.let { showError(it) }
+                    binding.toggleButton.check(
+                        when (uiState.historyRange) {
+                            LAST_HOUR -> binding.hour.id
+                            LAST_DAY -> binding.day.id
+                            LAST_WEEK -> binding.week.id
+                            LAST_MONTH -> binding.month.id
+                            LAST_YEAR -> binding.year.id
+                        }
+                    )
                 }
             }
         }
@@ -98,17 +111,6 @@ class DetailsFragment : Fragment() {
             maxSupply.text = currency.maxSupply
             vwap24hr.text = currency.vwap24Hr
             explorer.text = currency.explorer
-        }
-    }
-
-    private fun getHistoryRange(checkedId: Int): HistoryRange {
-        return when (checkedId) {
-            R.id.hour -> HistoryRange.LAST_HOUR
-            R.id.day -> HistoryRange.LAST_DAY
-            R.id.week -> HistoryRange.LAST_WEEK
-            R.id.month -> HistoryRange.LAST_MONTH
-            R.id.year -> HistoryRange.LAST_YEAR
-            else -> HistoryRange.LAST_DAY
         }
     }
 

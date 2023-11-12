@@ -28,7 +28,7 @@ class DetailsViewModel @Inject constructor(
             getCurrencyPriceDetails.launch(currencyId, historyRange)
                 .onStart {
                     _uiState.update {
-                        it.copy(isLoading = true, error = null)
+                        it.copy(isLoading = true, error = null, historyRange = historyRange)
                     }
                 }
                 .catch { error ->
@@ -36,20 +36,20 @@ class DetailsViewModel @Inject constructor(
                         is IOException -> _uiState.update {
                             DetailsUiState(
                                 isLoading = false,
-                                error = "Lost internet connection"
+                                error = "Lost internet connection",
                             )
                         }
 
                         else -> _uiState.update {
                             DetailsUiState(
                                 isLoading = false,
-                                error = error.message
+                                error = error.message,
                             )
                         }
                     }
                 }
                 .collectLatest { result ->
-                    _uiState.update { DetailsUiState(currency = result) }
+                    _uiState.update { DetailsUiState(currency = result, historyRange = historyRange) }
                 }
         }
     }
