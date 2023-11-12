@@ -47,7 +47,8 @@ class DetailsViewModelTest {
         val expectedValue = DetailsUiState(
             isLoading = false,
             error = null,
-            currency = useCaseResult
+            currency = useCaseResult,
+            historyRange = historyRange
         )
 
         viewModel.fetchData(currencyId, historyRange)
