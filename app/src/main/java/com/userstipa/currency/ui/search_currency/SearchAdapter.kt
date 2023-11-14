@@ -15,10 +15,27 @@ class SearchAdapter(
 ) : RecyclerView.Adapter<SearchAdapter.Holder>() {
 
     private val diffUtil = AsyncListDiffer(this, DiffUtilCallback())
-
-    var list: List<Currency>
+    private var searchList = emptyList<Currency>()
+    private var mainList: List<Currency>
         get() = diffUtil.currentList
         set(value) = diffUtil.submitList(value)
+
+    fun search(query: String) {
+        val lowerQuery = query.lowercase()
+        mainList = if (lowerQuery.isNotEmpty()) {
+            searchList.filter {
+                it.name.lowercase().contains(lowerQuery) || it.symbol.lowercase()
+                    .contains(lowerQuery)
+            }
+        } else {
+            searchList
+        }
+    }
+
+    fun setData(list: List<Currency>) {
+        searchList = list
+        mainList = list
+    }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -36,11 +53,11 @@ class SearchAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return mainList.size
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val currency = list[position]
+        val currency = mainList[position]
         with(holder.binding) {
             name.text = currency.name
             symbol.text = currency.symbol
@@ -48,10 +65,10 @@ class SearchAdapter(
 
             checkbox.setOnClickListener {
                 if (checkbox.isChecked) {
-                    list[holder.adapterPosition].isEnableCheckbox = true
+                    mainList[holder.adapterPosition].isEnableCheckbox = true
                     onClickAddCurrency(currency)
                 } else {
-                    list[holder.adapterPosition].isEnableCheckbox = false
+                    mainList[holder.adapterPosition].isEnableCheckbox = false
                     onClickRemoveCurrency(currency)
                 }
             }
@@ -68,6 +85,5 @@ class SearchAdapter(
         override fun areContentsTheSame(oldItem: Currency, newItem: Currency): Boolean {
             return oldItem == newItem
         }
-
     }
 }
