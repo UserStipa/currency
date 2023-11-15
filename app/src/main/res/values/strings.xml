@@ -9,6 +9,9 @@
     <string name="transition_home_to_search">transition_home_to_search</string>
     <string name="transition_home_to_details">transition_home_to_details%1s$</string>
 
+    <!-- Search -->
+    <string name="search">Search</string>
+
     <!-- Details -->
     <string name="one_hour">1h</string>
     <string name="one_day">1d</string>
