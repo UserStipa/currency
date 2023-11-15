@@ -7,12 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.transition.MaterialContainerTransform
 import com.userstipa.currency.App
@@ -60,23 +60,28 @@ class SearchFragment : Fragment() {
             onClickAddCurrency = { viewModel.addCurrency(it) },
             onClickRemoveCurrency = { viewModel.removeCurrency(it) }
         )
-        binding.apply {
-            list.layoutManager = LinearLayoutManager(requireContext())
-            list.adapter = adapter
-        }
     }
 
     private fun setUi(isFirstViewCreated: Boolean, view: View) {
         binding.apply {
             root.transitionName = getString(R.string.transition_home_to_search)
-            update.setOnClickListener { viewModel.fetchData() }
+            list.adapter = adapter
+            update.setOnClickListener {
+                viewModel.fetchData()
+            }
+            search.addTextChangedListener { edit ->
+                adapter.search(edit.toString())
+            }
         }
         sharedElementEnterTransition = MaterialContainerTransform().apply {
             duration = resources.getInteger(R.integer.duration_transitions_animation).toLong()
             scrimColor = Color.TRANSPARENT
-            containerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
-            startContainerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
-            endContainerColor = MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            containerColor =
+                MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            startContainerColor =
+                MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
+            endContainerColor =
+                MaterialColors.getColor(view, com.google.android.material.R.attr.colorSurface)
             addListener(OnTransitionEnd(isFirstViewCreated) {
                 setObservers()
             })
@@ -89,7 +94,7 @@ class SearchFragment : Fragment() {
                 viewModel.uiState.collectLatest { uiState ->
                     binding.errorLayout.visibility = View.INVISIBLE
                     binding.progressBar.isVisible = uiState.isLoading
-                    adapter.list = uiState.list
+                    adapter.setData(uiState.list)
                     uiState.error?.let { showError(it) }
                 }
             }
